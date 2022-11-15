@@ -1,8 +1,8 @@
 <!--
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-17 15:23:25
- * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-12 11:30:03
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-11-15 22:39:56
  * @FilePath: \yiyunMusic\music\src\components\item\ItemMusicTop.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -28,7 +28,7 @@
     <div class="itemMusicMain">
         <div class="itemMainTop">
             <div class="TopImg">
-                <img :src="msg.coverImgUrl + '?param=300y300'" :alt="msg.algTags">
+                <img :src="msg.coverImgUrl + '?param=300y300'" :alt="msg.algTags" @error.once="imgloaderror">
             </div>
             <div class="itemMainTopInfo" v-if="show">
                 <span>{{ msg.name }}</span>
@@ -82,6 +82,7 @@ import { onMounted, watch, ref } from 'vue';
 // props传值，判断数据是否获取到值
 let props = defineProps(['playlist'])
 let show = ref(null)
+
 show.value = props.playlist.hasOwnProperty('creator')
 // console.log(props.playlist.hasOwnProperty('creator'));
 // console.log(props);
@@ -113,6 +114,13 @@ let bmsg = watch(() => props.playlist, (a, pre) => {
     console.log('b23:', msg.value);
     // }, { immediate: true }) // 立即监听
 }) */
+// 图片加载的时候显示的图片
+let imgloaderror = (event) => {
+    // console.log(event);
+    // event.srcElement.src = ''
+    // event.srcElement.src = msg.coverImgUrl + '?param=300y300'
+    event.target.src = 'https://p1.music.126.net/kZb9DO4vykqiYEx0HHx86w==/109951163065542645.jpg?param=100y100'
+}
 
 let msg = computed(() => {
     let playlist = props.playlist
@@ -193,7 +201,7 @@ let playcount = (count) => {
                 display: block;
                 border: 1px solid transparent;
                 border-radius: .2rem;
-                object-fit:cover;
+                object-fit: cover;
             }
         }
 
