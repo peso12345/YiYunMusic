@@ -26,12 +26,13 @@
 import { Toast } from 'vant';
 import { useRouter } from 'vue-router';
 import { usePlayListStore } from '../../stores/playlist';
+import { getMusicOk } from '../../request/api/home';
 let state = usePlayListStore()
 let props = defineProps(['msg', 'isFromEveryDaySongs'])
 // let emit = defineEmits(['updataIndex'])
 let router = useRouter()
 
-let playMusic = (i, item = 0) => { // item原为push进歌曲列表所用，现未启用
+let playMusic = async (i, item = 0) => { // item原为push进歌曲列表所用，现未启用
     // console.log(state);
     // console.log(props.msg);
     // console.log(emit);
@@ -41,15 +42,22 @@ let playMusic = (i, item = 0) => { // item原为push进歌曲列表所用，现�
     //     emit('updataIndex', item)
     // }
     // 判断歌曲权限
+    let res = await getMusicOk(item.id)
+    console.log(res.data);
     console.log("object:", item);
     // fee：8和0可以播放，noCopyrightRcmd=null
-    if (item.fee === 8 || item.fee === 0) {
-        // 更新播放列表
-        state.updataPlayList(props.msg);
-        // console.log(state.playlist);
-        state.updataPlayListIndex(i);
+    if (res.data.success) {
+        // if ((!item.noCopyrightRcmd) && (item.fee === 8 || item.fee === 0)) {
+        if (item.fee == 1 || item.fee == 4) {
+            Toast('此为vip歌曲，请先开通vip或购买该专辑！')
+        } else {
+            // 更新播放列表
+            state.updataPlayList(props.msg);
+            // console.log(state.playlist);
+            state.updataPlayListIndex(i);
+        }
     } else {
-        Toast('由于版权问题，暂不提供播放！');
+        Toast(`${res.data.message}`);
     }
 
 

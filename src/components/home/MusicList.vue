@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 18:52:39
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-12 11:34:35
+ * @LastEditTime: 2022-11-16 19:08:57
  * @FilePath: \yiyunMusic\music\src\components\home\MusicList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEiv
 -->
@@ -13,7 +13,8 @@
             <div class="more">查看更多</div>
         </div>
         <div class="musicContent">
-            <van-swipe :loop="false" :width="160" class="my-Swiper" :show-indicators="false">
+            <van-swipe :loop="false" :width="swipeWidth" :height="swipeHeight" class="my-Swiper"
+                :show-indicators="false" ref="swipeRef">
                 <van-swipe-item class="my-item" v-for="item in state.musicList" :key="item.id">
                     <RouterLink :to="{ path: '/itemMusic', query: { id: item.id } }">
                         <!-- 这个div必须添加，不然会导致css定位失效 -->
@@ -36,8 +37,28 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { onMounted, reactive, watch } from 'vue';
+import { onMounted, reactive, watch,ref } from 'vue';
 import { getMusicList } from '../../request/api/home';
+
+// 获取浏览器窗口的视口宽度和高度，并在窗口大小变化时自动更新。
+import { useWindowSize } from '@vant/use';
+const { width, height } = useWindowSize();
+let swipeWidth = ref(0)
+let swipeHeight = ref(0)
+let swipeRef = ref(null)
+
+watch([width, height], ([newVal, new1], [oldVal, old1]) => {
+    console.log('window resized');
+    console.log(newVal);
+    //     //   console.log(new1);
+    swipeWidth.value = newVal / 2.5
+    swipeHeight.value = swipeWidth.value
+    console.log(swipeWidth.value);
+
+    console.log(swipeRef.value);
+
+    swipeRef.value?.resize()
+}, { immediate: true });
 
 let props = defineProps(['options', 'isFrom'])
 
@@ -48,6 +69,8 @@ let state = reactive({
     title: '发现好歌单',
 })
 onMounted(async () => {
+    swipeRef.value?.resize({width:swipeWidth.value,height:swipeHeight.value})
+
     // 是主页就请求数据，发现好歌单（默认）；其他页面，则采用props的数据渲染
     if (props.isFrom == 'isHome') {
         let { data } = await getMusicList()

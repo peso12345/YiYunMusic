@@ -111,6 +111,8 @@ import { onMounted, watch, ref, onUpdated } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js'
 import { Toast } from 'vant';
 
+import { getMusicOk } from '../../request/api/home';
+
 
 let props = defineProps(['musicList', 'isbtnShow', 'play', 'addDuration'])
 let state = usePlayListStore()
@@ -201,15 +203,19 @@ let musicLyric = computed(() => {
     // console.log(arr);
     return arr
 })
+
+let timer = 0;
 // 返回上层
 let backTo = () => {
+    // 清除定时器，停止goPlay()函数递归调用
+    clearTimeout(timer)
     state.updataDetailShow()
     isLyricShow.value = false
 }
 
 // 上一首下一首
-let timer = 0;
-let goPlay = (i) => {
+
+let goPlay = async (i) => {
     clearTimeout(timer)
     // console.log("播放上一首（-1）还是下一首（1）:", i);
     let index = state.playListIndex + i
@@ -227,11 +233,17 @@ let goPlay = (i) => {
     // 判断是否可以播放
     // console.log(state.playlist);
     // console.log(index);
-    // console.log(state.playlist[index]);
-    if (state.playlist[index].fee === 8 || state.playlist[index].fee === 0) {
+
+    // 检查歌曲是否可以播放
+    let res = await getMusicOk(state.playlist[index].id)
+    console.log(res.data);
+    if (res.data.success) {
+        console.log(!state.playlist[index].noCopyrightRcmd);
+        console.log(state.playlist[index].fee === 8 || state.playlist[index].fee === 0);
+        // if ((!state.playlist[index].noCopyrightRcmd) && (state.playlist[index].fee === 8 || state.playlist[index].fee === 0)) {
         console.log('开始播放:' + state.playlist[index].name);
     } else {
-        Toast('无版权，即将播放下一首！');
+        Toast(`${res.data.message}，即将播放下一首！`);
         timer = setTimeout(() => {
             goPlay(1)
         }, 2000);

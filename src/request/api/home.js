@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 17:39:27
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-07 17:08:10
+ * @LastEditTime: 2022-11-16 19:35:17
  * @FilePath: \yiyunMusic\music\src\request\api\home.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE 
  */
@@ -147,5 +147,14 @@ export function getAllRankList(){
     return service({
         method:'GET',
         url:`/toplist`
+    })
+}
+
+// 音乐是否可用
+// /check/music?id=33894312
+export function getMusicOk(id){
+    return service({
+        method:'GET',
+        url:`/check/music?id=${id}`
     })
 }
