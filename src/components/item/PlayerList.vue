@@ -27,6 +27,8 @@ import { Toast } from 'vant';
 import { useRouter } from 'vue-router';
 import { usePlayListStore } from '../../stores/playlist';
 import { getMusicOk } from '../../request/api/home';
+
+
 let state = usePlayListStore()
 let props = defineProps(['msg', 'isFromEveryDaySongs'])
 // let emit = defineEmits(['updataIndex'])

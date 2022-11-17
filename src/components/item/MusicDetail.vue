@@ -8,7 +8,7 @@
                     <use xlink:href="#icon-zuojiantou"></use>
                 </svg>
                 <div class="leftMarquee">
-                    <Vue3Marquee style="color: white;width: 70%;">
+                    <Vue3Marquee style="font-size: 0.35rem;color: white;width: 70%;">
                         {{ musicList.name }}
                     </Vue3Marquee>
                     <div class="bottomAct">
@@ -48,8 +48,11 @@
         <div class="detailFoot">
             <div class="footTop">
                 <!-- 喜欢 -->
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="toLove(true)" v-if="!isLove">
                     <use xlink:href="#icon-aixin"></use>
+                </svg>
+                <svg class="icon" aria-hidden="true" @click="toLove(false)" v-else>
+                    <use xlink:href="#icon-xihuan"></use>
                 </svg>
                 <!-- 下载 -->
                 <svg class="icon" aria-hidden="true">
@@ -111,14 +114,22 @@ import { onMounted, watch, ref, onUpdated } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js'
 import { Toast } from 'vant';
 
-import { getMusicOk } from '../../request/api/home';
+import { getMusicOk, getLoveList } from '../../request/api/home';
+import { getLoveMusic } from '../../request/api/item';
+
+// import * as dayjs from 'dayjs'
+// import * as isLeapYear from 'dayjs/plugin/isLeapYear' // 导入插件
+// import 'dayjs/locale/zh-cn' // 导入本地化语言
+
+// dayjs.extend(isLeapYear) // 使用插件
+// dayjs.locale('zh-cn') // 使用本地化语言
 
 
 let props = defineProps(['musicList', 'isbtnShow', 'play', 'addDuration'])
 let state = usePlayListStore()
 let isLyricShow = ref(false)
 let musicLyricref = ref(null)
-
+let isLove = ref(false)
 // props.addDuration()
 
 watch(() => state.currentTime, (newVal, b) => {
@@ -133,6 +144,11 @@ watch(() => state.currentTime, (newVal, b) => {
         musicLyricref.value.scrollTo({
             top: p.offsetTop - 200,
             behavior: 'smooth'
+        })
+    } else if (p && p.offsetTop < 20) {
+        musicLyricref.value.scrollTo({
+            top: 0,
+            // behavior: 'smooth'
         })
     }
     // 循环播放
@@ -161,6 +177,8 @@ onMounted(() => {
 // },{immediate:true})
 let musicList = computed(() => {
     // console.log('computed.musicList:', props.musicList);
+    // 查询是否喜欢该音乐
+    findLoveSong()
     return props.musicList
 })
 let isbtnShow = computed(() => {
@@ -204,7 +222,7 @@ let musicLyric = computed(() => {
     return arr
 })
 
-let timer = 0;
+let timer = 0; // 定时器返回值
 // 返回上层
 let backTo = () => {
     // 清除定时器，停止goPlay()函数递归调用
@@ -214,7 +232,6 @@ let backTo = () => {
 }
 
 // 上一首下一首
-
 let goPlay = async (i) => {
     clearTimeout(timer)
     // console.log("播放上一首（-1）还是下一首（1）:", i);
@@ -237,22 +254,72 @@ let goPlay = async (i) => {
     // 检查歌曲是否可以播放
     let res = await getMusicOk(state.playlist[index].id)
     console.log(res.data);
-    if (res.data.success) {
+    if (res.data.success && (state.playlist[index].fee === 8 || state.playlist[index].fee === 0)) {
         console.log(!state.playlist[index].noCopyrightRcmd);
         console.log(state.playlist[index].fee === 8 || state.playlist[index].fee === 0);
         // if ((!state.playlist[index].noCopyrightRcmd) && (state.playlist[index].fee === 8 || state.playlist[index].fee === 0)) {
         console.log('开始播放:' + state.playlist[index].name);
     } else {
-        Toast(`${res.data.message}，即将播放下一首！`);
+        if (res.data.message != 'ok') {
+            Toast(`${res.data.message}，即将播放下一首！`);
+        } else {
+            Toast(`该歌曲为vip歌曲，即将播放下一首！`);
+        }
         timer = setTimeout(() => {
             goPlay(1)
         }, 2000);
     }
 }
+
 onUpdated(() => {
     // props.addDuration()
     // console.log(state.duration);
 })
+
+// 查询喜欢列表里有没有喜欢该歌曲
+let findLoveSong = async () => {
+    // 获取喜欢的音乐列表
+    let id = JSON.parse(localStorage.getItem('id'))
+    // console.log(id);
+    let cookie = localStorage.getItem('cookie')
+    // 判断是否存在id和cookie
+    if (id && cookie) {
+        // 获取喜爱音乐的ids
+        let time = (new Date()).getTime()
+        console.log(time);
+        let { data } = await getLoveList(id, cookie, time)
+        console.log(data);
+        // console.log(musicList.value.id);
+        isLove.value = data.ids.includes(musicList.value.id)
+        console.log(isLove.value, '喜爱的歌曲:', musicList.value.name);
+    } else {
+        Toast('没有登录，无法获取喜爱的歌曲信息！')
+    }
+}
+// findLoveSong()
+
+// 喜欢该音乐（传入id和true）
+let toLove = async (like) => {
+    let id = musicList.value.id
+    console.log(musicList.value);
+    console.log(id, like);
+    let cookie = localStorage.getItem('cookie')
+    if (cookie) {
+        let time = (new Date()).getTime()
+        let res = await getLoveMusic(id, like, cookie, time)
+        console.log(like, '喜欢该音乐:', res);
+        if (res.data.code == 200) {
+            isLove.value = !isLove.value
+            // 查询有没有添加到喜欢列表里
+            // findLoveSong()
+        } else {
+            Toast('操作失败，请稍后再试！')
+        }
+    } else {
+        Toast('请先登录！')
+    }
+
+}
 </script>
 <style lang="less" scoped>
 .playerBoxAll {
@@ -301,7 +368,9 @@ onUpdated(() => {
                 align-items: center;
 
                 span {
-                    color: #999;
+                    // color: rgb(233,216,154);
+                    color: rgb(225, 219, 228);
+                    font-size: .28rem;
                 }
 
                 .icon {

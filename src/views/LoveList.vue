@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 01:45:12
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-04 14:08:07
+ * @LastEditTime: 2022-11-16 20:18:43
  * @FilePath: \yiyunMusic\music\src\views\PersonalFm.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,27 +21,35 @@
 import { ref } from 'vue';
 import PlayerList from '../components/item/PlayerList.vue';
 import { getLoveList, getLoveListAndThen } from '../request/api/home';
+import { useRouter } from 'vue-router'
 
 let ListSongs = ref([])
 let songsNumber = ref(0)
 let showList = ref(true)
+let router = useRouter()
 const getLoves = async () => {
   // 获取喜欢的音乐列表
   let id = JSON.parse(localStorage.getItem('id'))
   console.log(id);
   let cookie = localStorage.getItem('cookie')
-  // 获取喜爱音乐的ids
-  let { data } = await getLoveList(id, cookie)
-  console.log(data);
-  songsNumber.value = data.ids.length
-  console.log(songsNumber.value);
-  // 获取歌曲详情
-  // let ids;
-  // console.log(data.ids.toString());
-  let res = await getLoveListAndThen(data.ids.toString())
-  console.log(res);
-  ListSongs.value = res.data.songs
-  showList.value = false
+  // 判断是否存在id和cookie
+  if (id && cookie) {
+    // 获取喜爱音乐的ids
+    let { data } = await getLoveList(id, cookie)
+    console.log(data);
+    songsNumber.value = data.ids.length
+    console.log(songsNumber.value);
+    // 获取歌曲详情
+    // let ids;
+    // console.log(data.ids.toString());
+    let res = await getLoveListAndThen(data.ids.toString())
+    console.log(res);
+    ListSongs.value = res.data.songs
+    showList.value = false
+  } else {
+    router.push('/login')
+  }
+
 }
 getLoves()
 </script>

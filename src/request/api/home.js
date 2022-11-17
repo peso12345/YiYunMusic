@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 17:39:27
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-16 19:35:17
+ * @LastEditTime: 2022-11-16 23:04:22
  * @FilePath: \yiyunMusic\music\src\request\api\home.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE 
  */
@@ -104,10 +104,10 @@ export function getEveryDaySongs(data) {
 
 //  获取已喜欢音乐ids
 // /likelist?uid=32953014+cookie
-export function getLoveList(id,cookie) {
+export function getLoveList(id,cookie,time) {
     return service({
         method: "GET",
-        url: `/likelist?uid=${id}&cookie=${cookie}`
+        url: `/likelist?uid=${id}&cookie=${cookie}&timestamp=${time}`
     })
 }
 

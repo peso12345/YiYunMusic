@@ -1,18 +1,19 @@
 <!--
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-19 17:15:01
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-11-15 17:31:25
+ * @LastEditors: peso12345 157223121@qq.com
+ * @LastEditTime: 2022-11-16 20:36:05
  * @FilePath: \yiyunMusic\music\src\components\item\FooterMusic.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
     <div class="FootMusic">
         <div class="footLeft" @click="state.updataDetailShow">
-            <img :src="(state.playlist[state.playListIndex]?.al?.picUrl??state.playlist[state.playListIndex].picUrl) + '?param=200y200'" alt="">
+            <img :src="(state.playlist[state.playListIndex]?.al?.picUrl ?? state.playlist[state.playListIndex].picUrl) + '?param=200y200'"
+                alt="">
             <div>
-                <p>{{ state.playlist[state.playListIndex].name }}</p>
-                <span>滑动切换下一曲</span>
+                <p class="van-ellipsis name">{{ state.playlist[state.playListIndex].name }}</p>
+                <span class="xiangqing">点击查看详情</span>
             </div>
         </div>
         <div class="footRight">
@@ -40,7 +41,6 @@ import { computed } from '@vue/reactivity';
 import { onMounted, onUpdated, ref, watch } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js';
 import MusicDetail from './MusicDetail.vue';
-
 
 let state = usePlayListStore()
 // console.log(state.playListIndex);
@@ -77,7 +77,7 @@ let addDuration = () => {
     // console.log(state.duration);
 
     // 递归调用自己，确保获取有效的歌曲长度（时间）
-    if(!state.duration){
+    if (!state.duration) {
         setTimeout(() => {
             addDuration()
         }, 200);
@@ -93,7 +93,7 @@ let addDuration = () => {
 let updataTime = () => {
     // console.log(audio);
     interVal = setInterval(() => {
-         state.updataCurrentTime(audio.value.currentTime)
+        state.updataCurrentTime(audio.value.currentTime)
     }, 20)
 }
 let show = computed(() => {
@@ -148,6 +148,20 @@ onUpdated(() => {
             display: block;
             border: 1px solid transparent;
             border-radius: 50%;
+        }
+
+        div {
+            padding-left: .1rem;
+            width: 80%;
+            .name {
+                font-size: .3rem;
+                font-weight: 600;
+            }
+
+            .xiangqing {
+                font-size: .25rem;
+                color: rgb(8, 167, 230);
+            }
         }
     }
 
