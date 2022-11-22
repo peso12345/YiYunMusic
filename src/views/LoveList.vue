@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 01:45:12
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-16 20:18:43
+ * @LastEditTime: 2022-11-20 14:46:04
  * @FilePath: \yiyunMusic\music\src\views\PersonalFm.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,10 +18,22 @@
   <PlayerList :msg="ListSongs" v-else></PlayerList>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import PlayerList from '../components/item/PlayerList.vue';
 import { getLoveList, getLoveListAndThen } from '../request/api/home';
 import { useRouter } from 'vue-router'
+
+// 改造yinghua.js，并导入
+import yinghua from '../js/yinghua.js';
+onBeforeMount(() => {
+  // 每次进入此组件前执行函数
+  yinghua()
+})
+onBeforeUnmount(() => {
+// 退出组件前，删除canvas_sakura元素
+  let aa = document.getElementById('canvas_sakura')
+  aa.remove()
+})
 
 let ListSongs = ref([])
 let songsNumber = ref(0)

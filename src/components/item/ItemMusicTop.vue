@@ -1,8 +1,8 @@
 <!--
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-17 15:23:25
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-11-15 22:39:56
+ * @LastEditors: peso12345 157223121@qq.com
+ * @LastEditTime: 2022-11-18 02:25:47
  * @FilePath: \yiyunMusic\music\src\components\item\ItemMusicTop.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -119,6 +119,7 @@ let imgloaderror = (event) => {
     // console.log(event);
     // event.srcElement.src = ''
     // event.srcElement.src = msg.coverImgUrl + '?param=300y300'
+
     event.target.src = 'https://p1.music.126.net/kZb9DO4vykqiYEx0HHx86w==/109951163065542645.jpg?param=100y100'
 }
 

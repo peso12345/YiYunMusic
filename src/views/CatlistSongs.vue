@@ -2,14 +2,14 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 13:56:53
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-12 11:45:09
+ * @LastEditTime: 2022-11-20 14:20:59
  * @FilePath: \yiyunMusic\music\src\views\CatlistSongs.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
     <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" v-if="otherOptions.showTop" />
     <div class="listBox">
-        <van-list v-model:loading="loading" :finished="finished" finished-text="更多请点击歌单" @load="onLoad">
+        <van-list v-model:loading="loading" :finished="finished" :finished-text="otherOptions.finishedText" @load="onLoad">
             <div class="listBoxItem" v-for="(item, i) in options" :key="item">
                 <MusicList :options="options[i]" :isFrom="isCatList"></MusicList>
             </div>
@@ -23,25 +23,28 @@ import MusicList from '../components/home/MusicList.vue';
 import { getSongsCatlist, getSongsCatlistAll } from '../request/api/home';
 import { usePlayListStore } from '../stores/playlist';
 
+const props = defineProps(['catOptions']);
+
 // 其他配置项
-let otherOptions = ref({
+const otherOptions = ref({
     showTop: true, // 显示顶部导航栏
     showListNumber: 999,// 显示几个列表
+    finishedText:'没有更多了！'
 })
-let props = defineProps(['catOptions'])
+
 // console.log(props);
 if (props.catOptions) {
     otherOptions.value = props.catOptions
 }
 
 let state = usePlayListStore()
-const list = ref([]);
-const loading = ref(false);
-const finished = ref(false);
+let list = ref([]);
+let loading = ref(false);
+let finished = ref(false);
 
-let title = ref('热门歌单分类')
-let isCatList = ref('isCatList')
-let options = ref([{
+const title = ref('热门歌单分类')
+const isCatList = ref('isCatList')
+const options = ref([{
     title: '华语',
     playlists: [],
 }])
@@ -97,7 +100,7 @@ let getAllList = async () => {
 };
 
 
-let hotSongList = computed(() => {
+const hotSongList = computed(() => {
     // console.log(state);
     return state.hotSongsList
 })
@@ -168,7 +171,7 @@ const onLoad = async () => {
             })
             // 赋值
             let data = {
-                title: hotSongList.value[index].name,
+                title: hotSongList.value[index]?.name,
                 playlists: res.data.playlists
             }
             // 赋值给options变量，传到下一个页面
@@ -228,7 +231,6 @@ const onLoad = async () => {
     // console.log(options.value);
     // console.log(hotSongList.value)
 };
-
 </script>
 <style lang="less" scoped>
 :deep(.van-nav-bar__title) {

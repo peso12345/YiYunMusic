@@ -63,9 +63,12 @@
                     <use xlink:href="#icon-changpian"></use>
                 </svg>
                 <!-- 评论 -->
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="toTalkAbout">
                     <use xlink:href="#icon-xiaoxi"></use>
                 </svg>
+                <van-popup v-model:show="isTalkShow" round position="bottom" :style="{ height: '60%' }">
+                    <component :is="talkAboutComponent" :alldata="playerSongThisTime" v-if="isTalkShow"></component>
+                </van-popup>
                 <!-- 循环播放列表 -->
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-liebiao-"></use>
@@ -110,12 +113,15 @@ import { Vue3Marquee } from 'vue3-marquee'
 import 'vue3-marquee/dist/style.css'
 
 import { computed } from '@vue/reactivity';
-import { onMounted, watch, ref, onUpdated } from 'vue';
+import { onMounted, watch, ref, onUpdated, shallowRef } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js'
 import { Toast } from 'vant';
 
 import { getMusicOk, getLoveList } from '../../request/api/home';
 import { getLoveMusic } from '../../request/api/item';
+import { useRouter } from 'vue-router';
+
+let router = useRouter()
 
 // import * as dayjs from 'dayjs'
 // import * as isLeapYear from 'dayjs/plugin/isLeapYear' // 导入插件
@@ -130,6 +136,10 @@ let state = usePlayListStore()
 let isLyricShow = ref(false)
 let musicLyricref = ref(null)
 let isLove = ref(false)
+// shallowRef使用他减少性能消耗，不会响应式地追踪组件，不使用ref。
+let talkAboutComponent = shallowRef(null)
+let isTalkShow = ref(false)
+// let checkPoint = ref(0) // 喜欢列表的检查点（时间戳）
 // props.addDuration()
 
 watch(() => state.currentTime, (newVal, b) => {
@@ -175,10 +185,23 @@ onMounted(() => {
 // watch(()=>props.musicList, (a, b) => { // 无法监听的原因：组件生命周期问题，需开启立即监听
 //     console.log('watch.musicList:', a, b);
 // },{immediate:true})
+
+let playerSongThisTime = ref({})
+// 当前歌曲信息
 let musicList = computed(() => {
-    // console.log('computed.musicList:', props.musicList);
+    console.log('computed.musicList:', props.musicList);
     // 查询是否喜欢该音乐
+    // 主页面里我的喜欢，数据更新有两分钟的延迟，可去除
+    // 该函数需要登录后才能成功执行，已添加相关跳转登录机制
     findLoveSong()
+
+    // console.log(1111);
+    if (isTalkShow.value) {
+        playerSongThisTime.value.id = props.musicList.id
+        playerSongThisTime.value.type = 0 // 0: 歌曲，3: 专辑
+        console.log('music34');
+    }
+
     return props.musicList
 })
 let isbtnShow = computed(() => {
@@ -283,6 +306,8 @@ let findLoveSong = async () => {
     // console.log(id);
     let cookie = localStorage.getItem('cookie')
     // 判断是否存在id和cookie
+    // console.log(cookie);
+
     if (id && cookie) {
         // 获取喜爱音乐的ids
         let time = (new Date()).getTime()
@@ -293,12 +318,16 @@ let findLoveSong = async () => {
         isLove.value = data.ids.includes(musicList.value.id)
         console.log(isLove.value, '喜爱的歌曲:', musicList.value.name);
     } else {
-        Toast('没有登录，无法获取喜爱的歌曲信息！')
+        // Toast('没有登录，无法获取喜爱的歌曲信息！')
+        console.log('没有登录，无法获取喜爱的歌曲信息！');
+
     }
+
 }
 // findLoveSong()
 
 // 喜欢该音乐（传入id和true）
+let two = 0;
 let toLove = async (like) => {
     let id = musicList.value.id
     console.log(musicList.value);
@@ -317,8 +346,24 @@ let toLove = async (like) => {
         }
     } else {
         Toast('请先登录！')
-    }
+        two++;
+        if (two >= 2) {
+            setTimeout(() => {
+                router.push('/login')
+                two = 0
+            }, 1000);
+        }
 
+    }
+}
+// 动态引入组件
+let loadComponent = value => import(`../talk/${value}.vue`)
+let toTalkAbout = () => {
+    loadComponent('TalkAbout').then(component => {
+        talkAboutComponent.value = component.default
+        isTalkShow.value = true
+        console.log('toTalkAbout');
+    })
 }
 </script>
 <style lang="less" scoped>

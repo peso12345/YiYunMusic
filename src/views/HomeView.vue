@@ -16,6 +16,7 @@ import CatlistSongs from './CatlistSongs.vue';
 let catOptions = {
   showTop: false, // 显示顶部导航栏
   showListNumber: 3,// 显示几个列表
+  finishedText:'更多请点击歌单！',
 }
 
 </script>

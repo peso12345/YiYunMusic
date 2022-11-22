@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-19 17:15:01
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-16 20:36:05
+ * @LastEditTime: 2022-11-20 15:27:14
  * @FilePath: \yiyunMusic\music\src\components\item\FooterMusic.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -38,6 +38,7 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
+import { Toast } from 'vant';
 import { onMounted, onUpdated, ref, watch } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js';
 import MusicDetail from './MusicDetail.vue';
@@ -60,6 +61,7 @@ let audio = ref(null)
 
 let interVal = 0;
 let play = () => {
+   console.log([audio.value]);
     if (audio.value.paused) {
         audio.value.play();
         state.updataIsbtnShow(false)
@@ -153,6 +155,7 @@ onUpdated(() => {
         div {
             padding-left: .1rem;
             width: 80%;
+
             .name {
                 font-size: .3rem;
                 font-weight: 600;
