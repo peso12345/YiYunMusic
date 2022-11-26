@@ -22,9 +22,12 @@
                 </div>
             </div>
             <div class="detailRight">
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="showShare = true">
                     <use xlink:href="#icon-fenxiang"></use>
                 </svg>
+                <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect"
+                    cancel-text="" />
+                <QRcodes @disappear="QRcodesUnmount" v-if="aQRcodeShow" />
             </div>
         </div>
         <div class="detailContent" v-show="!isLyricShow">
@@ -55,11 +58,11 @@
                     <use xlink:href="#icon-xihuan"></use>
                 </svg>
                 <!-- 下载 -->
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="downLoadSong">
                     <use xlink:href="#icon-xiazai-wenjianxiazai-07"></use>
                 </svg>
                 <!-- 播放图标 -->
-                <svg class="icon" aria-hidden="true" style="fill:aliceblue">
+                <svg class="icon" aria-hidden="true" style="fill:aliceblue" @click="isLyricShow = !isLyricShow">
                     <use xlink:href="#icon-changpian"></use>
                 </svg>
                 <!-- 评论 -->
@@ -70,7 +73,7 @@
                     <component :is="talkAboutComponent" :alldata="playerSongThisTime" v-if="isTalkShow"></component>
                 </van-popup>
                 <!-- 循环播放列表 -->
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="Toast('暂未开放！')">
                     <use xlink:href="#icon-liebiao-"></use>
                 </svg>
             </div>
@@ -80,7 +83,7 @@
             </div>
             <div class="footFooter">
                 <!-- 循环模式 -->
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="Toast('暂未开放！')">
                     <use xlink:href="#icon-xunhuan"></use>
                 </svg>
                 <!-- 上一首 -->
@@ -100,7 +103,7 @@
                     <use xlink:href="#icon-xiayigexiayishou"></use>
                 </svg>
                 <!-- 当前播放列表 -->
-                <svg class="icon" aria-hidden="true">
+                <svg class="icon" aria-hidden="true" @click="Toast('暂未开放！')">
                     <use xlink:href="#icon-gl-playlistMusic"></use>
                 </svg>
             </div>
@@ -111,15 +114,17 @@
 <script setup>
 import { Vue3Marquee } from 'vue3-marquee'
 import 'vue3-marquee/dist/style.css'
-
 import { computed } from '@vue/reactivity';
-import { onMounted, watch, ref, onUpdated, shallowRef } from 'vue';
+import { onMounted, watch, ref, onUpdated, shallowRef, defineAsyncComponent } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js'
 import { Toast } from 'vant';
-
 import { getMusicOk, getLoveList } from '../../request/api/home';
-import { getLoveMusic } from '../../request/api/item';
+import { getLoveMusic, getDownloadSong } from '../../request/api/item';
 import { useRouter } from 'vue-router';
+
+import fileDownload from "../../js/download.js";
+
+const props = defineProps(['musicList', 'isbtnShow', 'play', 'addDuration']);
 
 let router = useRouter()
 
@@ -131,7 +136,7 @@ let router = useRouter()
 // dayjs.locale('zh-cn') // 使用本地化语言
 
 
-let props = defineProps(['musicList', 'isbtnShow', 'play', 'addDuration'])
+
 let state = usePlayListStore()
 let isLyricShow = ref(false)
 let musicLyricref = ref(null)
@@ -148,7 +153,7 @@ watch(() => state.currentTime, (newVal, b) => {
     // console.log(p.offsetTop);
     // console.log(newVal);
 
-    if (p && p.offsetTop > 200) {
+    if (p && (p.offsetTop > 200)) {
         // console.dir(musicLyricref.value);
         // musicLyricref.value.scrollTop = p.offsetTop - 200
         musicLyricref.value.scrollTo({
@@ -199,7 +204,7 @@ let musicList = computed(() => {
     if (isTalkShow.value) {
         playerSongThisTime.value.id = props.musicList.id
         playerSongThisTime.value.type = 0 // 0: 歌曲，3: 专辑
-        console.log('music34');
+        // console.log('music34');
     }
 
     return props.musicList
@@ -277,7 +282,7 @@ let goPlay = async (i) => {
     // 检查歌曲是否可以播放
     let res = await getMusicOk(state.playlist[index].id)
     console.log(res.data);
-    if (res.data.success && (state.playlist[index].fee === 8 || state.playlist[index].fee === 0)) {
+    if (res.data.success && (state.playlist[index].name == '演员' || state.playlist[index].fee === 8 || state.playlist[index].fee === 0)) {
         console.log(!state.playlist[index].noCopyrightRcmd);
         console.log(state.playlist[index].fee === 8 || state.playlist[index].fee === 0);
         // if ((!state.playlist[index].noCopyrightRcmd) && (state.playlist[index].fee === 8 || state.playlist[index].fee === 0)) {
@@ -286,7 +291,9 @@ let goPlay = async (i) => {
         if (res.data.message != 'ok') {
             Toast(`${res.data.message}，即将播放下一首！`);
         } else {
+            console.log('vip歌曲?:', state.playlist[index].name);
             Toast(`该歌曲为vip歌曲，即将播放下一首！`);
+
         }
         timer = setTimeout(() => {
             goPlay(1)
@@ -356,7 +363,21 @@ let toLove = async (like) => {
 
     }
 }
+"http://m801.music.126.net/20221122234310/714ed0b24c6443bdacbaadc58125abdb/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096410674/892b/2a82/ed85/1114ebfe7116d48f675e7a869ad7e8ed.mp3"
+let downLoadSong = async () => {
+    // console.log(state.getCookie());
+    let res = await getDownloadSong(musicList.value.id, 999000)
+    console.log(res.data);
+    console.log(res.data.data[0].url);
+    let urls = res.data.data[0].url
+    // window.open(urls, '_blank');
+    // window.location.href = urls;
+    // 跨域资源，只传url
+    fileDownload(urls)
+
+}
 // 动态引入组件
+// defineAsyncComponent // 异步组件
 let loadComponent = value => import(`../talk/${value}.vue`)
 let toTalkAbout = () => {
     loadComponent('TalkAbout').then(component => {
@@ -364,6 +385,52 @@ let toTalkAbout = () => {
         isTalkShow.value = true
         console.log('toTalkAbout');
     })
+}
+
+// 分享面板
+const showShare = ref(false);
+const options = [
+    { name: '微信', icon: 'wechat' },
+    { name: '微博', icon: 'weibo' },
+    { name: '复制链接', icon: 'link' },
+    { name: '二维码', icon: 'qrcode' },
+];
+
+let aQRcodeShow = ref(false)
+const onSelect = (option) => {
+    Toast(option.name);
+    if (option.name === '微信') {
+        window.open('https://weixin.qq.com/')
+    }
+    if (option.name === '微博') {
+        window.open('https://weibo.com/')
+    }
+    if (option.name === '二维码') {
+        aQRcodeShow.value = true
+    }
+
+    if (option.name === '复制链接') {
+        let target = document.createElement('input') //创建input节点
+        target.value = window.location.href; // 给input的value赋值
+        document.body.appendChild(target) // 向页面插入input节点
+        target.select() // 选中input
+        if (document.execCommand('Copy')) {
+            document.execCommand('Copy') // 执行浏览器复制命令
+            Toast('复制成功')
+            target.remove()
+        } else {
+            Toast('复制失败，请使用二维码分享！')
+        }
+
+    }
+    
+    showShare.value = false;
+};
+const QRcodes = defineAsyncComponent(() => import('../talk/QRcode.vue'))
+let QRcodesUnmount = (value) => {
+    // console.log(value);
+    // aQRcodeShow.value = false
+    aQRcodeShow.value = value
 }
 </script>
 <style lang="less" scoped>
@@ -428,7 +495,7 @@ let toTalkAbout = () => {
 
     }
 
-    .detailRight {}
+    // .detailRight {}
 }
 
 .detailContent {

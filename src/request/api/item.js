@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-17 15:04:24
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-22 20:54:52
+ * @LastEditTime: 2022-11-22 23:25:07
  * @FilePath: \yiyunMusic\music\src\request\api\item.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -77,5 +77,18 @@ export function getTalkAboutClick(data) {
     return service({
         method: "GET",
         url: `/comment/like?type=${data.type}&id=${data.id}&cid=${data.cid}&t=${data.t}&cookie=${data.cookie}`
+    })
+}
+
+// 获取客户端歌曲下载 url
+// 说明 : 使用 /song/url 接口获取的是歌曲试听 url, 但存在部分歌曲在非 VIP 账号上可以下载无损音质而不能试听无损音质, 使用此接口可使非 VIP 账号获取这些歌曲的无损音频
+// 必选参数 : id : 音乐 id (仅支持单首歌曲)
+// 可选参数 : br : 码率, 默认设置了 999000 即最大码率, 如果要 320k 则可设置为 320000, 其他类推
+// 接口地址 : /song/download/url
+
+export function getDownloadSong(id,br) {
+    return service({
+        method: "GET",
+        url: `/song/url?id=${id}&br=${br}`
     })
 }

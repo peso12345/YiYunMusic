@@ -2,76 +2,78 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-17 15:23:25
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-18 02:25:47
+ * @LastEditTime: 2022-11-24 02:14:50
  * @FilePath: \yiyunMusic\music\src\components\item\ItemMusicTop.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-    <div class="itemMusicTop">
-        <!-- 背景图片 -->
-        <img :src="msg.coverImgUrl" alt="" srcset="" class="bgimg">
-        <div class="itemLeft">
-            <svg class="icon" aria-hidden="true" @click="$router.go(-1)">
-                <use xlink:href="#icon-zuojiantou"></use>
-            </svg>
-            <span>歌单</span>
-        </div>
-        <div class="itemRight">
-            <svg class="icon" aria-hidden="true" @click="$router.push('/search')">
-                <use xlink:href="#icon-sousuo"></use>
-            </svg>
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-liebiao"></use>
-            </svg>
-        </div>
-    </div>
-    <div class="itemMusicMain">
-        <div class="itemMainTop">
-            <div class="TopImg">
-                <img :src="msg.coverImgUrl + '?param=300y300'" :alt="msg.algTags" @error.once="imgloaderror">
+    <div style="width:100%;">
+        <div class="itemMusicTop">
+            <!-- 背景图片 -->
+            <img :src="msg.coverImgUrl + '?param=600y600'" alt="" srcset="" class="bgimg">
+            <div class="itemLeft">
+                <svg class="icon" aria-hidden="true" @click="$router.go(-1)">
+                    <use xlink:href="#icon-zuojiantou"></use>
+                </svg>
+                <span>歌单</span>
             </div>
-            <div class="itemMainTopInfo" v-if="show">
-                <span>{{ msg.name }}</span>
-                <div class="itemMainTopInfoCreator">
-                    <img style="{width:.4rem;}" :src="msg.creator.avatarUrl" alt="">
-                    <span class="CreatorSpan">
-                        {{ msg.creator.nickname }}
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-xiangyoujiantou"></use>
-                        </svg>
-                    </span>
+            <div class="itemRight">
+                <svg class="icon" aria-hidden="true" @click="$router.push('/search')">
+                    <use xlink:href="#icon-sousuo"></use>
+                </svg>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-liebiao"></use>
+                </svg>
+            </div>
+        </div>
+        <div class="itemMusicMain">
+            <div class="itemMainTop">
+                <div class="TopImg">
+                    <img :src="msg.coverImgUrl + '?param=300y300'" :alt="msg.algTags" @error.once="imgloaderror">
                 </div>
-                <span class="van-multi-ellipsis--l2">{{ msg.creator.signature }}</span>
+                <div class="itemMainTopInfo" v-if="show">
+                    <span>{{ msg.name }}</span>
+                    <div class="itemMainTopInfoCreator">
+                        <img style="{width:.7rem;height:.7rem;}" :src="msg.creator.avatarUrl + '?param=60y60'" alt="">
+                        <span class="CreatorSpan">
+                            {{ msg.creator.nickname }}
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-xiangyoujiantou"></use>
+                            </svg>
+                        </span>
+                    </div>
+                    <span class="van-multi-ellipsis--l2">{{ msg.creator.signature }}</span>
+                </div>
+                <!-- <span>{{msg.creator.nickname}}</span> -->
+                <!-- <span>{{msg.creator.signature}}</span> -->
             </div>
-            <!-- <span>{{msg.creator.nickname}}</span> -->
-            <!-- <span>{{msg.creator.signature}}</span> -->
-        </div>
-        <div class="itemMainBottom">
-            <div class="itemMainBottomInfo">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-xiaoxi"></use>
-                </svg>
-                <span>{{ playcount(msg.commentCount) }}</span>
-            </div>
-            <div class="itemMainBottomInfo">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-fenxiang"></use>
-                </svg>
-                <span>{{ playcount(msg.shareCount) }}</span>
-            </div>
+            <div class="itemMainBottom">
+                <div class="itemMainBottomInfo">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-xiaoxi"></use>
+                    </svg>
+                    <span>{{ playcount(msg.commentCount) }}</span>
+                </div>
+                <div class="itemMainBottomInfo">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-fenxiang"></use>
+                    </svg>
+                    <span>{{ playcount(msg.shareCount) }}</span>
+                </div>
 
-            <div class="itemMainBottomInfo">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-xiazai-wenjianxiazai-07"></use>
-                </svg>
-                <span>下载</span>
+                <div class="itemMainBottomInfo">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-xiazai-wenjianxiazai-07"></use>
+                    </svg>
+                    <span>下载</span>
 
-            </div>
-            <div class="itemMainBottomInfo">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-xuanze-duoxuan-tianchong"></use>
-                </svg>
-                <span>多选</span>
+                </div>
+                <div class="itemMainBottomInfo">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-xuanze-duoxuan-tianchong"></use>
+                    </svg>
+                    <span>多选</span>
+                </div>
             </div>
         </div>
     </div>
@@ -174,7 +176,8 @@ let playcount = (count) => {
     .bgimg {
         width: 100%;
         height: 11rem;
-        position: fixed;
+        // position: fixed;
+        position: absolute;
         z-index: -1;
         filter: blur(30px); // 虚化
     }
@@ -229,7 +232,6 @@ let playcount = (count) => {
 
 
                 img {
-                    width: .75rem;
                     border-radius: 50%;
                 }
 
