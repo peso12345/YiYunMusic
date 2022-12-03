@@ -103,7 +103,7 @@ onMounted(() => {
 // 获取推荐新音乐
 const getSongs = async (limit = 50) => {
     let { data } = await getEveryDaySongs(limit)
-    // console.log(data);
+    console.log(data);
     if (data.code === 200) {
         let todo = []
 

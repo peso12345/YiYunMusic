@@ -22,12 +22,14 @@
                 </div>
             </div>
             <div class="detailRight">
-                <svg class="icon" aria-hidden="true" @click="showShare = true">
+                <svg class="icon" aria-hidden="true" @click="showShare.show = true">
                     <use xlink:href="#icon-fenxiang"></use>
                 </svg>
-                <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect"
+                <!-- <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect"
                     cancel-text="" />
-                <QRcodes @disappear="QRcodesUnmount" v-if="aQRcodeShow" />
+                <QRcodes @disappear="QRcodesUnmount" v-if="aQRcodeShow" /> -->
+                <!-- 分享组件 -->
+                <Share :showShare="showShare" v-if="showShare.show"></Share>
             </div>
         </div>
         <div class="detailContent" v-show="!isLyricShow">
@@ -144,6 +146,7 @@ let isLove = ref(false)
 // shallowRef使用他减少性能消耗，不会响应式地追踪组件，不使用ref。
 let talkAboutComponent = shallowRef(null)
 let isTalkShow = ref(false)
+const showShare = ref({ show: false });
 // let checkPoint = ref(0) // 喜欢列表的检查点（时间戳）
 // props.addDuration()
 
@@ -363,7 +366,7 @@ let toLove = async (like) => {
 
     }
 }
-"http://m801.music.126.net/20221122234310/714ed0b24c6443bdacbaadc58125abdb/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096410674/892b/2a82/ed85/1114ebfe7116d48f675e7a869ad7e8ed.mp3"
+// "http://m801.music.126.net/20221122234310/714ed0b24c6443bdacbaadc58125abdb/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096410674/892b/2a82/ed85/1114ebfe7116d48f675e7a869ad7e8ed.mp3"
 let downLoadSong = async () => {
     // console.log(state.getCookie());
     let res = await getDownloadSong(musicList.value.id, 999000)
@@ -387,51 +390,51 @@ let toTalkAbout = () => {
     })
 }
 
-// 分享面板
-const showShare = ref(false);
-const options = [
-    { name: '微信', icon: 'wechat' },
-    { name: '微博', icon: 'weibo' },
-    { name: '复制链接', icon: 'link' },
-    { name: '二维码', icon: 'qrcode' },
-];
+// // 分享面板
+// const showShare = ref(false);
+// const options = [
+//     { name: '微信', icon: 'wechat' },
+//     { name: '微博', icon: 'weibo' },
+//     { name: '复制链接', icon: 'link' },
+//     { name: '二维码', icon: 'qrcode' },
+// ];
 
-let aQRcodeShow = ref(false)
-const onSelect = (option) => {
-    Toast(option.name);
-    if (option.name === '微信') {
-        window.open('https://weixin.qq.com/')
-    }
-    if (option.name === '微博') {
-        window.open('https://weibo.com/')
-    }
-    if (option.name === '二维码') {
-        aQRcodeShow.value = true
-    }
+// let aQRcodeShow = ref(false)
+// const onSelect = (option) => {
+//     Toast(option.name);
+//     if (option.name === '微信') {
+//         window.open('https://weixin.qq.com/')
+//     }
+//     if (option.name === '微博') {
+//         window.open('https://weibo.com/')
+//     }
+//     if (option.name === '二维码') {
+//         aQRcodeShow.value = true
+//     }
 
-    if (option.name === '复制链接') {
-        let target = document.createElement('input') //创建input节点
-        target.value = window.location.href; // 给input的value赋值
-        document.body.appendChild(target) // 向页面插入input节点
-        target.select() // 选中input
-        if (document.execCommand('Copy')) {
-            document.execCommand('Copy') // 执行浏览器复制命令
-            Toast('复制成功')
-            target.remove()
-        } else {
-            Toast('复制失败，请使用二维码分享！')
-        }
+//     if (option.name === '复制链接') {
+//         let target = document.createElement('input') //创建input节点
+//         target.value = window.location.href; // 给input的value赋值
+//         document.body.appendChild(target) // 向页面插入input节点
+//         target.select() // 选中input
+//         if (document.execCommand('Copy')) {
+//             document.execCommand('Copy') // 执行浏览器复制命令
+//             Toast('复制成功')
+//             target.remove()
+//         } else {
+//             Toast('复制失败，请使用二维码分享！')
+//         }
 
-    }
-    
-    showShare.value = false;
-};
-const QRcodes = defineAsyncComponent(() => import('../talk/QRcode.vue'))
-let QRcodesUnmount = (value) => {
-    // console.log(value);
-    // aQRcodeShow.value = false
-    aQRcodeShow.value = value
-}
+//     }
+
+//     showShare.value = false;
+// };
+// const QRcodes = defineAsyncComponent(() => import('../talk/QRcode.vue'))
+// let QRcodesUnmount = (value) => {
+//     // console.log(value);
+//     // aQRcodeShow.value = false
+//     aQRcodeShow.value = value
+// }
 </script>
 <style lang="less" scoped>
 .playerBoxAll {

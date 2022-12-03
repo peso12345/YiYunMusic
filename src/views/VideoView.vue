@@ -20,9 +20,9 @@
                             </svg>
                             <span>{{ info[i].playCount }}</span>
                         </span>
-                        <span>{{ info[i].name }}</span>
+                        <span class="midSpan">{{ info[i].name }}</span>
                         <!-- +info[i].duration / 1000 + 's'  -->
-                        <span>{{ celDuration(info,i) }}</span>
+                        <span>{{ celDuration(info, i) }}</span>
                     </div>
                     <!-- 播放器 -->
                     <VideoPlayer :options="videoOptions[i]" :id="i" @play="onPlayerPlay($event)"></VideoPlayer>
@@ -50,11 +50,12 @@ import 'vue3-marquee/dist/style.css'
 import { celDuration } from '../js/timeformat'; // 格式化视频时间
 
 // console.log(celDuration(1));
+console.log('videoview');
 
 let show = ref(false)
 let info = ref([])
 let videoOptions = reactive([{
-    poster: '', //  
+    poster: '', //
     sources: [ // 源地址
         {
             src: "http://vodkgeyttp8.vod.126.net/cloudmusic/759e/core/6e08/0236f65c221d9ed692a476eaa7023865.mp4?wsSecret=d849f2ddb10a333b9a0fb7a1cac9dd8f&wsTime=1666980762",
@@ -72,26 +73,112 @@ let videoOptions = reactive([{
     preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
     language: "zh-CN",
     playbackRates: [0.5, 1.0, 1.5, 2.0], // 可选的播放速度
-    controls: true,
+    controls: true, // 是否显示控制条
     notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
     // userActions: {
     //     doubleClick: myDoubleClickHandler //控制双击玩家/技术的操作方式
     // },
-    controlBar: {
-        timeDivider: true, // 当前时间和持续时间的分隔符
-        durationDisplay: true, // 显示持续时间
-        remainingTimeDisplay: false, // 是否显示剩余时间功能
-        fullscreenToggle: true, // 是否显示全屏按钮
+    controlBar: { // 设置控制条组件
+        // timeDivider: true, // 当前时间和持续时间的分隔符
+        // durationDisplay: true, // 显示持续时间
+        // remainingTimeDisplay: false, // 是否显示剩余时间功能
+        // fullscreenToggle: true, // 是否显示全屏按钮
+        // currentTimeDisplay:true,
+
+        /* 使用children的形式可以控制每一个控件的位置，以及显示与否 */
+        children: [
+            { name: 'playToggle' }, // 播放按钮
+            { name: 'currentTimeDisplay' }, // 当前已播放时间
+            { name: 'progressControl' }, // 播放进度条
+            { name: 'durationDisplay' }, // 总时间
+            { // 倍数播放
+                name: 'playbackRateMenuButton',
+                playbackRates: [0.5, 1.0, 1.5, 2.0],
+            },
+            {
+                name: 'volumePanel', // 音量控制
+                inline: false, // 不使用水平方式
+            },
+            { name: 'FullscreenToggle' } // 全屏
+        ]
     },
+
 }])
 
 // 获取所有的MV信息
 const getMvinfo = async () => {
     // 获取推荐mv的列表
     let { data } = await getPersonaMv()
-    // console.log(data.result);
+    console.log(data.result);
 
-    let mapData = await Promise.all(data.result.map(async (item, i) => {
+    // let mapData = await Promise.all(data.result.map(async (item, i) => {
+
+    //     info.value.push({ // mv信息
+    //         picUrl: item.picUrl, // 地址
+    //         artistName: item.artistName, // 歌手名
+    //         duration: item.duration, // 持续时间
+    //         name: item.name, // mv名字
+    //         playCount: item.playCount, // 播放次数
+    //     })
+
+    //     // 获取每个id的mv的播放地址
+    //     let res = await getPersonaMvAddr(data.result[i].id)
+    //     console.log(res);
+    //     if (i === 0) {
+    //         videoOptions[0].poster = item.picUrl
+    //         videoOptions[0].sources[0].src = res.data.data.url
+
+    //         show.value = true
+    //     } else {
+    //         videoOptions.push({
+    //             poster: item.picUrl,//
+    //             sources: [{ // 源地址
+    //                 src: res.data.data.url,
+    //                 type: "video/mp4",
+    //             }],
+    //             // fluid: true,
+    //             aspectRatio: "16:9",
+    //             width: "",
+    //             height: "",
+    //             autoplay: false,
+    //             muted: false,
+    //             loop: false,
+    //             preload: "auto",
+    //             language: "zh-CN",
+    //             playbackRates: [0.5, 1.0, 1.5, 2.0],
+    //             controls: true,
+    //             notSupportedMessage: "此视频暂无法播放，请稍后再试",
+    //             controlBar: {
+    //                 // timeDivider: true,
+    //                 // durationDisplay: true,
+    //                 // remainingTimeDisplay: false,
+    //                 // fullscreenToggle: true,
+    //                 children: [
+    //                     { name: 'playToggle' }, // 播放按钮
+    //                     { name: 'currentTimeDisplay' }, // 当前已播放时间
+    //                     { name: 'progressControl' }, // 播放进度条
+    //                     { name: 'durationDisplay' }, // 总时间
+    //                     { // 倍数播放
+    //                         name: 'playbackRateMenuButton',
+    //                         playbackRates: [0.5, 1.0, 1.5, 2.0],
+    //                     },
+    //                     {
+    //                         name: 'volumePanel', // 音量控制
+    //                         inline: false, // 不使用水平方式
+    //                     },
+    //                     { name: 'FullscreenToggle' } // 全屏
+    //                 ]
+    //             },
+    //         })
+    //         show.value = true
+    //     }
+
+
+
+    //     return res.data.data
+    // }))
+
+    let mapData = data.result.map(async (item, i) => {
 
         info.value.push({ // mv信息
             picUrl: item.picUrl, // 地址
@@ -103,7 +190,7 @@ const getMvinfo = async () => {
 
         // 获取每个id的mv的播放地址
         let res = await getPersonaMvAddr(data.result[i].id)
-        // console.log(res);
+        console.log(res);
         if (i === 0) {
             videoOptions[0].poster = item.picUrl
             videoOptions[0].sources[0].src = res.data.data.url
@@ -111,7 +198,7 @@ const getMvinfo = async () => {
             show.value = true
         } else {
             videoOptions.push({
-                poster: item.picUrl,//  
+                poster: item.picUrl,//
                 sources: [{ // 源地址
                     src: res.data.data.url,
                     type: "video/mp4",
@@ -129,10 +216,25 @@ const getMvinfo = async () => {
                 controls: true,
                 notSupportedMessage: "此视频暂无法播放，请稍后再试",
                 controlBar: {
-                    timeDivider: true,
-                    durationDisplay: true,
-                    remainingTimeDisplay: false,
-                    fullscreenToggle: true,
+                    // timeDivider: true,
+                    // durationDisplay: true,
+                    // remainingTimeDisplay: false,
+                    // fullscreenToggle: true,
+                    children: [
+                        { name: 'playToggle' }, // 播放按钮
+                        { name: 'currentTimeDisplay' }, // 当前已播放时间
+                        { name: 'progressControl' }, // 播放进度条
+                        { name: 'durationDisplay' }, // 总时间
+                        { // 倍数播放
+                            name: 'playbackRateMenuButton',
+                            playbackRates: [0.5, 1.0, 1.5, 2.0],
+                        },
+                        {
+                            name: 'volumePanel', // 音量控制
+                            inline: false, // 不使用水平方式
+                        },
+                        { name: 'FullscreenToggle' } // 全屏
+                    ]
                 },
             })
             show.value = true
@@ -141,35 +243,12 @@ const getMvinfo = async () => {
 
 
         return res.data.data
-    }))
-    // let res = await getPersonaMvAddr(data.result[0].id)
-    // console.log(res);
-    // console.log(res.data.data.url);
+    })
 
-    // data.result.forEach((item, i) => {
-    //     console.log(item, i);
-    //     // videoOptions[i].poster = item.picUrl
-    //     if (i === 0) {
-    //         videoOptions[0] = {
-    //             poster: item.picUrl,
-    //             // sources:
-    //         }
-    //     } else {
-    //         videoOptions.push({
-    //             poster: item.picUrl
-    //         })
-    //     }
-    //     // videoOptions[i]
-    //     // console.log(videoOptions[i].poster);
-    // })
-    // console.log(mapData);
-    // console.log(data);
-    // info.value = data.result
-    // videoOptions = mapData
-    // console.log('videoOptions:', videoOptions);
+
 }
 getMvinfo()
-
+console.log('object.173');
 
 // 播放回调
 const onPlayerPlay = (player) => {
@@ -215,6 +294,10 @@ const onPlayerPlay = (player) => {
     }
 }
 
+.midSpan {
+    margin: 0 .2rem;
+}
+
 .playerBoxAll {
     display: flex;
     flex-direction: column;
@@ -225,6 +308,8 @@ const onPlayerPlay = (player) => {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        padding: 0 .2rem;
     }
 
     .mvTop {
@@ -262,7 +347,7 @@ const onPlayerPlay = (player) => {
                     height: 100%;
                     display: flex;
                     flex-flow: row nowrap;
-                    justify-content: space-around;
+                    justify-content: space-between;
                     align-items: center;
 
                     span {

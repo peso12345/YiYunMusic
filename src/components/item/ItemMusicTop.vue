@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-17 15:23:25
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-24 02:14:50
+ * @LastEditTime: 2022-11-29 15:28:11
  * @FilePath: \yiyunMusic\music\src\components\item\ItemMusicTop.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -49,24 +49,29 @@
             </div>
             <div class="itemMainBottom">
                 <div class="itemMainBottomInfo">
-                    <svg class="icon" aria-hidden="true">
+                    <svg class="icon" aria-hidden="true" @click="toTalkAbout">
                         <use xlink:href="#icon-xiaoxi"></use>
                     </svg>
                     <span>{{ playcount(msg.commentCount) }}</span>
+                    <!-- 评论组件 -->
+                    <van-popup v-model:show="isTalkShow" round position="bottom" :style="{ height: '60%' }">
+                        <component :is="talkAboutComponent" :alldata="playerSongThisTime" v-if="isTalkShow"></component>
+                    </van-popup>
                 </div>
                 <div class="itemMainBottomInfo">
-                    <svg class="icon" aria-hidden="true">
+                    <svg class="icon" aria-hidden="true" @click="showShare.show = true">
                         <use xlink:href="#icon-fenxiang"></use>
                     </svg>
                     <span>{{ playcount(msg.shareCount) }}</span>
+                    <!-- 分享组件 -->
+                    <Share :showShare="showShare" v-if="showShare.show"></Share>
                 </div>
 
-                <div class="itemMainBottomInfo">
+                <div class="itemMainBottomInfo" @click="download">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-xiazai-wenjianxiazai-07"></use>
                     </svg>
                     <span>下载</span>
-
                 </div>
                 <div class="itemMainBottomInfo">
                     <svg class="icon" aria-hidden="true">
@@ -80,10 +85,17 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { onMounted, watch, ref } from 'vue';
+import { Toast } from 'vant';
+import { onMounted, watch, ref, shallowRef } from 'vue';
+import fileDownload from "../../js/download.js";
+
 // props传值，判断数据是否获取到值
 let props = defineProps(['playlist'])
 let show = ref(null)
+let showShare = ref({ show: false })
+
+let isTalkShow = ref(false)
+let playerSongThisTime = ref({})
 
 show.value = props.playlist.hasOwnProperty('creator')
 // console.log(props.playlist.hasOwnProperty('creator'));
@@ -105,7 +117,14 @@ watch(() => props.playlist, (newVal, oldVal) => {
         props.playlist.creator = JSON.parse(sessionStorage.getItem('itemDetail')).playlist.creator
         console.log(props.playlist.creator);
     }
+    // if (isTalkShow.value) {
+    //     playerSongThisTime.value.id = msg.value.id
+    //     playerSongThisTime.value.type = 2 // 0: 歌曲 1: mv 2: 歌单 3: 专辑
+    //     // console.log('music34',playerSongThisTime.value);
+    // }
     // console.log(33333);
+    // console.log('music346',playerSongThisTime.value);
+
 
 })
 /* let msg = ref({});
@@ -141,6 +160,30 @@ let playcount = (count) => {
     } else {
         return count
     }
+}
+
+// 下载
+let download = () => {
+   Toast('功能开发中...')
+}
+
+// shallowRef使用他减少性能消耗，不会响应式地追踪组件，不使用ref。
+let talkAboutComponent = shallowRef(null)
+// 动态引入组件
+// defineAsyncComponent // 异步组件
+
+let loadComponent = value => import(`../talk/${value}.vue`)
+let toTalkAbout = () => {
+    loadComponent('TalkAbout').then(component => {
+        talkAboutComponent.value = component.default
+        isTalkShow.value = true
+        console.log('toTalkAbout');
+        if (isTalkShow.value) {
+            playerSongThisTime.value.id = msg.value.id
+            playerSongThisTime.value.type = 2 // 0: 歌曲 1: mv 2: 歌单 3: 专辑
+            // console.log('music347',playerSongThisTime.value);
+        }
+    })
 }
 
 </script>
