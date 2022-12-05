@@ -1,33 +1,35 @@
 <template>
-    <van-nav-bar class="barTopFiex" :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" />
-    <div class="rankListBox">
-        <van-swipe ref="swipeRef" class="mySwiper" @change="onChange" :loop="false" :width="320" :autoplay="0"
-            :show-indicators="false">
-            <van-swipe-item class="mySwiperItem" v-for="(item, i) in datas" :key="item">
-                <div class="box">
-                    <div class="boxItemTop">
-                        <h2 class="topOne">{{ datas[i].name }} <span>{{ datas[i].updateFrequency }}</span>
-                        </h2>
-                        <div>
-                            播放:{{ playcount(datas[i].playCount) }}
-                            &nbsp;&nbsp;
-                            订阅:{{ playcount(datas[i].subscribedCount) }}
+    <div>
+        <van-nav-bar class="barTopFiex" :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" />
+        <div class="rankListBox">
+            <van-swipe ref="swipeRef" class="mySwiper" @change="onChange" :loop="false" :width="320" :autoplay="0"
+                :show-indicators="false">
+                <van-swipe-item class="mySwiperItem" v-for="(item, i) in datas" :key="item">
+                    <div class="box">
+                        <div class="boxItemTop">
+                            <h2 class="topOne">{{ datas[i].name }} <span>{{ datas[i].updateFrequency }}</span>
+                            </h2>
+                            <div>
+                                播放:{{ playcount(datas[i].playCount) }}
+                                &nbsp;&nbsp;
+                                订阅:{{ playcount(datas[i].subscribedCount) }}
+                            </div>
                         </div>
-                    </div>
-                    <div v-if="show">
-                        <div class="boxItemContain" v-if="show">
-                            <PlayerList :msg="listSong[i]"></PlayerList>
-                            <div class="boxItemContainButtom">
-                                <h2 class="boxBottom" @click="getSongs(i, datas[i].id, datas[i].name, 20, 20)"
-                                    v-if="showMore">查看更多
-                                </h2>
-                                <h2 class="boxBottom" @click="toTop" v-else>回到顶部</h2>
+                        <div v-if="show">
+                            <div class="boxItemContain" v-if="show">
+                                <PlayerList :msg="listSong[i]"></PlayerList>
+                                <div class="boxItemContainButtom">
+                                    <h2 class="boxBottom" @click="getSongs(i, datas[i].id, datas[i].name, 20, 20)"
+                                        v-if="showMore">查看更多
+                                    </h2>
+                                    <h2 class="boxBottom" @click="toTop" v-else>回到顶部</h2>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </van-swipe-item>
-        </van-swipe>
+                </van-swipe-item>
+            </van-swipe>
+        </div>
     </div>
     <!-- 榜单结束 -->
 </template>
@@ -126,7 +128,7 @@ let getSongs = async (index, id = datas.value[0].id, name, limit = 20, offset = 
         }
         if (!listSong.value[index]) { // 如果当前歌曲列表详情没有值，就添加数据进去
             // 如果歌曲列表详情没有值，就添加数据进去
-            listSong.value[index]=res.data.songs
+            listSong.value[index] = res.data.songs
         } else {  // 有值了，就按照位置添加数据
             // console.log(`当前位置已经有数据了，请修改offset，为这个当前index为${index}的列表末尾添加更多数据`);
             // listSong.value

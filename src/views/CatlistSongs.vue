@@ -2,18 +2,22 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 13:56:53
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-20 14:20:59
+ * @LastEditTime: 2022-12-04 01:41:01
  * @FilePath: \yiyunMusic\music\src\views\CatlistSongs.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-    <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" v-if="otherOptions.showTop" />
-    <div class="listBox">
-        <van-list v-model:loading="loading" :finished="finished" :finished-text="otherOptions.finishedText" @load="onLoad">
-            <div class="listBoxItem" v-for="(item, i) in options" :key="item">
-                <MusicList :options="options[i]" :isFrom="isCatList"></MusicList>
-            </div>
-        </van-list>
+    <div>
+        <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="$router.push('/')"
+            v-if="otherOptions.showTop" />
+        <div class="listBox">
+            <van-list v-model:loading="loading" :finished="finished" :finished-text="otherOptions.finishedText"
+                @load="onLoad">
+                <div class="listBoxItem" v-for="(item, i) in options" :key="item">
+                    <MusicList :options="options[i]" :isFrom="isCatList"></MusicList>
+                </div>
+            </van-list>
+        </div>
     </div>
 </template>
 <script setup>
@@ -29,7 +33,7 @@ const props = defineProps(['catOptions']);
 const otherOptions = ref({
     showTop: true, // 显示顶部导航栏
     showListNumber: 999,// 显示几个列表
-    finishedText:'没有更多了！'
+    finishedText: '没有更多了！'
 })
 
 // console.log(props);

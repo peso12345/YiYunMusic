@@ -8,7 +8,7 @@
                 <h2>热门MV每天更新</h2>
             </Vue3Marquee>
         </div> <!-- playerBoxTop end -->
-        <h1>最新热门MV推荐</h1>
+        <!-- <h1>最新热门MV推荐</h1> -->
         <br>
         <div class="mvTop">
             <div class="mvBox" v-for="(item, i) in videoOptions" :key="item">
@@ -190,7 +190,7 @@ const getMvinfo = async () => {
 
         // 获取每个id的mv的播放地址
         let res = await getPersonaMvAddr(data.result[i].id)
-        console.log(res);
+        console.log(i + ':', res);
         if (i === 0) {
             videoOptions[0].poster = item.picUrl
             videoOptions[0].sources[0].src = res.data.data.url

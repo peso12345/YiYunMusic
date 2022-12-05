@@ -8,20 +8,21 @@
 
 -->
 <template>
-    <div class="serchTop">
-        <svg class="icon" aria-hidden="true" @click="router.go(-1)">
-            <use xlink:href="#icon-zuojiantou"></use>
-        </svg>
-        <input type="text" placeholder="薛之谦" v-model="searchKey" @keydown.enter="enterKey">
-    </div>
-    <div class="srarchHistory">
-        <p>历史:</p>
-        <span v-for="item in keyWorldList" :key="item" @click="searchHistory(item)">{{item}}</span>
-        <svg class="icon" aria-hidden="true" @click="delHistory">
-            <use xlink:href="#icon-lajixiang"></use>
-        </svg>
-    </div>
-    <!-- <div class="itemList">
+    <div>
+        <div class="serchTop">
+            <svg class="icon" aria-hidden="true" @click="router.go(-1)">
+                <use xlink:href="#icon-zuojiantou"></use>
+            </svg>
+            <input type="text" placeholder="薛之谦" v-model="searchKey" @keydown.enter="enterKey">
+        </div>
+        <div class="srarchHistory">
+            <p>历史:</p>
+            <span v-for="item in keyWorldList" :key="item" @click="searchHistory(item)">{{ item }}</span>
+            <svg class="icon" aria-hidden="true" @click="delHistory">
+                <use xlink:href="#icon-lajixiang"></use>
+            </svg>
+        </div>
+        <!-- <div class="itemList">
         <div class="item" v-for="(item,i) in searchList" :key="i">
             <div class="itemLeft" @click="updataIndex(item)">
                 <span class="leftSpan">{{i+1}}</span>
@@ -42,7 +43,8 @@
             </div>
         </div>
     </div> -->
-    <PlayerList :msg="searchList"></PlayerList>
+        <PlayerList :msg="searchList"></PlayerList>
+    </div>
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';

@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-15 21:46:36
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-03 19:35:13
+ * @LastEditTime: 2022-12-05 20:06:51
  * @FilePath: \gitclone\README.md
  * @Description: 音乐
 -->
@@ -37,9 +37,10 @@ npm run build
 ```
 ```
 TODO:
-    修改线上bug，每日推荐歌曲的mv播放和推荐mv的请求顺序和mv的播放量
+    等待反馈，修改线上bug,优化喜欢模块的加载
 ```
 ```
-    播放量已修改，mv容器宽高已自适应,修改video的UI显示逻辑,将mv弹出层挂载到#app节点
+    <!--（已完成） 播放量已修改，mv容器宽高已自适应,修改video的UI显示逻辑,将mv弹出层挂载到#app节点 -->
+    <!--（已完成） 添加侧边导航 -->
 ```
 

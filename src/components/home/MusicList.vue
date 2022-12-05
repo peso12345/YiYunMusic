@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 18:52:39
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-20 13:54:53
+ * @LastEditTime: 2022-12-04 16:49:15
  * @FilePath: \yiyunMusic\music\src\components\home\MusicList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEiv
 -->
@@ -10,7 +10,7 @@
     <div class="musicList">
         <div class="musicTop">
             <div class="title">{{ state.title }}</div>
-            <div class="more">查看更多</div>
+            <div class="more" @click="$router.push('/catlistsongs')">查看更多</div>
         </div>
         <div class="musicContent">
             <van-swipe :loop="false" :width="swipeWidth" :height="swipeHeight" class="my-Swiper"

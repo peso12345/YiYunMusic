@@ -1,6 +1,6 @@
 <template>
     <div class="loginBox">
-        <svg class="icon" aria-hidden="true" @click="router.push('/')">
+        <svg class="icon" aria-hidden="true" @click="router.push({name:'home'})">
             <use xlink:href="#icon-zuojiantou"></use>
         </svg>
         <div class="login">

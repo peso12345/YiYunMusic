@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-20 18:37:46
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-12 17:30:46
+ * @LastEditTime: 2022-12-05 18:46:01
  * @FilePath: \yiyunMusic\music\src\stores\playlist.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -97,11 +97,14 @@ export const usePlayListStore = defineStore('playlist', () => {
         } else {
             // if(localStorage.getItem('token')){
             user.value = await getLoginUser(JSON.parse(localStorage.getItem('id')))
-            console.log(user.value);
+            // console.log(user.value);
             // }
         }
         // console.log('jiji2:', user.value);
-        // return user.value
+
+        // return new Promise((res,rej)=>{
+        //     res(user.value)
+        // })
     }
     function updataAccountId(id) {
         accountid.value = id

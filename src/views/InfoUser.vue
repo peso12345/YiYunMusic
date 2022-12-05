@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-23 16:45:59
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-12 17:31:57
+ * @LastEditTime: 2022-12-05 18:47:09
  * @FilePath: \yiyunMusic\music\src\views\InfoUser.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -84,6 +84,8 @@ let quit = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('cookie')
     sessionStorage.removeItem('userinfo')
+    localStorage.removeItem('id')
+
     router.push('/login')
 }
 let back = () => {

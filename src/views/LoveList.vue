@@ -2,30 +2,32 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 01:45:12
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-22 21:54:05
+ * @LastEditTime: 2022-12-04 16:36:02
  * @FilePath: \yiyunMusic\music\src\views\PersonalFm.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="songsTop">
-    <svg class="icon" aria-hidden="true" @click="$router.push('/')">
-      <use xlink:href="#icon-zuojiantou"></use>
-    </svg>
-    <h1>喜爱的歌曲{{ songsNumber }}首</h1>
-  </div>
-  <van-empty description="加载中......" v-if="showList" />
+  <div>
+    <div class="songsTop">
+      <svg class="icon" aria-hidden="true" @click="$router.push('/')">
+        <use xlink:href="#icon-zuojiantou"></use>
+      </svg>
+      <h1>喜爱的歌曲{{ songsNumber }}首</h1>
+    </div>
+    <van-empty description="加载中......" v-if="showList" />
 
-  <PlayerList :msg="ListSongs" v-else></PlayerList>
+    <PlayerList :msg="ListSongs" v-else></PlayerList>
+  </div>
 </template>
 <script setup>
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import PlayerList from '../components/item/PlayerList.vue';
 import { getLoveList, getLoveListAndThen } from '../request/api/home';
 import { useRouter } from 'vue-router'
 
 // 改造yinghua.js，并导入
 import { startSakura, stopp } from '../js/yinghua.js';
-onBeforeMount(() => {
+onMounted(() => {
   // 每次进入此组件前执行函数
   // yinghua()
   startSakura()
