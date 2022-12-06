@@ -40,14 +40,14 @@ import VideoPlayer from '../components/mv/VideoPlayer.vue';
 import { Vue3Marquee } from 'vue3-marquee'
 import 'vue3-marquee/dist/style.css'
 
-// import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 // import * as isLeapYear from 'dayjs/plugin/isLeapYear' // 导入插件
-// import 'dayjs/locale/zh-cn' // 导入本地化语言
+import 'dayjs/locale/zh-cn' // 导入本地化语言
 
 // dayjs.extend(isLeapYear) // 使用插件
-// dayjs.locale('zh-cn') // 使用本地化语言
+dayjs.locale('zh-cn') // 使用本地化语言
 
-import { celDuration } from '../js/timeformat'; // 格式化视频时间
+// import { celDuration } from '../js/timeformat'; // 格式化视频时间
 
 // console.log(celDuration(1));
 console.log('videoview');
@@ -111,73 +111,6 @@ const getMvinfo = async () => {
     let { data } = await getPersonaMv()
     console.log(data.result);
 
-    // let mapData = await Promise.all(data.result.map(async (item, i) => {
-
-    //     info.value.push({ // mv信息
-    //         picUrl: item.picUrl, // 地址
-    //         artistName: item.artistName, // 歌手名
-    //         duration: item.duration, // 持续时间
-    //         name: item.name, // mv名字
-    //         playCount: item.playCount, // 播放次数
-    //     })
-
-    //     // 获取每个id的mv的播放地址
-    //     let res = await getPersonaMvAddr(data.result[i].id)
-    //     console.log(res);
-    //     if (i === 0) {
-    //         videoOptions[0].poster = item.picUrl
-    //         videoOptions[0].sources[0].src = res.data.data.url
-
-    //         show.value = true
-    //     } else {
-    //         videoOptions.push({
-    //             poster: item.picUrl,//
-    //             sources: [{ // 源地址
-    //                 src: res.data.data.url,
-    //                 type: "video/mp4",
-    //             }],
-    //             // fluid: true,
-    //             aspectRatio: "16:9",
-    //             width: "",
-    //             height: "",
-    //             autoplay: false,
-    //             muted: false,
-    //             loop: false,
-    //             preload: "auto",
-    //             language: "zh-CN",
-    //             playbackRates: [0.5, 1.0, 1.5, 2.0],
-    //             controls: true,
-    //             notSupportedMessage: "此视频暂无法播放，请稍后再试",
-    //             controlBar: {
-    //                 // timeDivider: true,
-    //                 // durationDisplay: true,
-    //                 // remainingTimeDisplay: false,
-    //                 // fullscreenToggle: true,
-    //                 children: [
-    //                     { name: 'playToggle' }, // 播放按钮
-    //                     { name: 'currentTimeDisplay' }, // 当前已播放时间
-    //                     { name: 'progressControl' }, // 播放进度条
-    //                     { name: 'durationDisplay' }, // 总时间
-    //                     { // 倍数播放
-    //                         name: 'playbackRateMenuButton',
-    //                         playbackRates: [0.5, 1.0, 1.5, 2.0],
-    //                     },
-    //                     {
-    //                         name: 'volumePanel', // 音量控制
-    //                         inline: false, // 不使用水平方式
-    //                     },
-    //                     { name: 'FullscreenToggle' } // 全屏
-    //                 ]
-    //             },
-    //         })
-    //         show.value = true
-    //     }
-
-
-
-    //     return res.data.data
-    // }))
-
     let mapData = data.result.map(async (item, i) => {
 
         info.value.push({ // mv信息
@@ -195,7 +128,7 @@ const getMvinfo = async () => {
             videoOptions[0].poster = item.picUrl
             videoOptions[0].sources[0].src = res.data.data.url
 
-            show.value = true
+            // show.value = true
         } else {
             videoOptions.push({
                 poster: item.picUrl,//
@@ -237,10 +170,10 @@ const getMvinfo = async () => {
                     ]
                 },
             })
-            show.value = true
+
         }
 
-
+        if (i === 3) show.value = true
 
         return res.data.data
     })
@@ -257,14 +190,14 @@ const onPlayerPlay = (player) => {
 
 // 格式化时间
 
-// let celDuration = (i) => {
-//     let time = info.value[i].duration
+let celDuration = (a, i) => {
+    let time = info.value[i].duration
 
-//     let times = dayjs(time).format('mm:ss')
-//     // console.log(info.value[i].duration);
-//     // console.log(times);
-//     return times
-// }
+    let times = dayjs(time).format('mm:ss')
+    console.log(info.value[i].duration);
+    console.log(times);
+    return times
+}
 
 </script>
 <style lang="less" scoped>

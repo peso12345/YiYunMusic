@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 17:39:27
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-16 23:04:22
+ * @LastEditTime: 2022-12-06 08:52:16
  * @FilePath: \yiyunMusic\music\src\request\api\home.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE 
  */
@@ -111,7 +111,7 @@ export function getLoveList(id,cookie,time) {
     })
 }
 
-//  获取ids歌曲详情
+//  获取当前ids歌曲详情
 // /song/detail?ids=347230,/song/detail?ids=347230,347231
 export function getLoveListAndThen(ids) {
     return service({
