@@ -12,7 +12,7 @@
         <br>
         <div class="mvTop">
             <div class="mvBox" v-for="(item, i) in videoOptions" :key="item">
-                <div class="playerBox" ref="playerRef" v-if="show">
+                <div class="playerBox" ref="playerRef" v-if="show[i]">
                     <div class="playerBoxTop">
                         <span class="playerCountIcon">
                             <svg class="icon" aria-hidden="true">
@@ -52,7 +52,7 @@ dayjs.locale('zh-cn') // 使用本地化语言
 // console.log(celDuration(1));
 console.log('videoview');
 
-let show = ref(false)
+let show = ref([])
 let info = ref([])
 let videoOptions = reactive([{
     poster: '', //
@@ -105,12 +105,21 @@ let videoOptions = reactive([{
 
 }])
 
+const getOneMV = (id) => {
+    return new Promise((res, rej) => {
+        getPersonaMvAddr(id).then(result => res(result)).catch(err => console.log(err))
+    })
+}
 // 获取所有的MV信息
 const getMvinfo = async () => {
     // 获取推荐mv的列表
     let { data } = await getPersonaMv()
     console.log(data.result);
-
+    data.result.forEach(element => {
+        show.value.push(false)
+        // console.log(element);
+    });
+    console.log(show.value);
     let mapData = data.result.map(async (item, i) => {
 
         info.value.push({ // mv信息
@@ -122,8 +131,9 @@ const getMvinfo = async () => {
         })
 
         // 获取每个id的mv的播放地址
-        let res = await getPersonaMvAddr(data.result[i].id)
-        console.log(i + ':', res);
+        // let res = await getPersonaMvAddr(data.result[i].id)
+        let res = await getOneMV(data.result[i].id)
+        console.table(i + ':' + data.result[i].id + ':' , res);
         if (i === 0) {
             videoOptions[0].poster = item.picUrl
             videoOptions[0].sources[0].src = res.data.data.url
@@ -173,7 +183,8 @@ const getMvinfo = async () => {
 
         }
 
-        if (i === 3) show.value = true
+        // if (i === 3) show.value = true
+        show.value[i] = true
 
         return res.data.data
     })
@@ -188,9 +199,26 @@ const onPlayerPlay = (player) => {
     console.log('player play!', player)
 }
 
+// let aae = []
+// aae[0]  =  4
+// aae[9] = 8
+// console.log('aae:',aae);
+// console.log('aae:',aae[6]);
+// console.log('aae:',aae[0]);
+// console.log('aae:',aae[8]);
+// console.log('aae:',aae[9]);
+// 输出：
+// aae: (10) [4, empty × 8, 8] 0: 4 9: 8 length: 10 [[Prototype]]: Array(0)
+// VideoView.vue:195 aae: undefined
+// VideoView.vue:196 aae: 4
+// VideoView.vue:197 aae: undefined
+// VideoView.vue:198 aae: 8
+
 // 格式化时间
 
 let celDuration = (a, i) => {
+
+    console.log(i, info.value);
     let time = info.value[i].duration
 
     let times = dayjs(time).format('mm:ss')

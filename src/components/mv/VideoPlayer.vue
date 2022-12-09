@@ -13,8 +13,9 @@
         </video> -->
         <!-- videojs-mobile-ui  -->
         <!-- <video :id="`my-video-${props.id}`" class="video-js vjs-theme-city videojs-mobile-ui vjs-big-play-centered"> -->
-        <video :ref="`videoRef${props.id}`" :id="`my-video-${props.id}`" :style="{ height: '100vw/16*9', width: '100vw' }"
-            class="video-js vjs-default-skin vjs-big-play-centered" playsinline="true">
+        <video :ref="`videoRef${props.id}`" :id="`my-video-${props.id}`"
+            :style="{ height: '100vw/16*9', width: '100vw' }" class="video-js vjs-default-skin vjs-big-play-centered"
+            playsinline="true" webkit-playsinline="true">
             <!-- <source :src="info.sources[0].src" :type="info.sources[0].type"> -->
             <p class="vjs-no-js">
                 查看这个视频请启用JavaScript,和考虑升级您的网页浏览器
@@ -212,6 +213,11 @@ div {
         // align-items: center;
         left: -0.45em;
     }
+
+    // :deep(.video-js.vjs-paused .vjs-big-play-button) {
+    //     /* 视频暂停时显示播放按钮 */
+    //     display: block;
+    // }
 
     .video-js {
         font-size: 10px;
