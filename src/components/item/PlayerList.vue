@@ -50,12 +50,14 @@ let isVideoShow = ref([])
 let info = computed(() => {
     console.log('object111:', props.msg);
     if (props.msg) {
-        props.msg.forEach(element => {
+        props.msg.forEach((element,i) => {
             // isVideoShow.value.push(Boolean(element.mv))
             // 初始化，隐藏所有mv弹窗
-            isVideoShow.value.push(false)
+            // isVideoShow.value.push(false)
+            isVideoShow.value[i] = false
         });
         console.log(isVideoShow.value);
+        console.log(props.msg);
     }
 
 
