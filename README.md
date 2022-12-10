@@ -2,13 +2,14 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-15 21:46:36
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-09 17:50:06
+ * @LastEditTime: 2022-12-10 19:02:02
  * @FilePath: \gitclone\README.md
  * @Description: 音乐
 -->
 # music
 
-This template should help get you started developing with Vue 3 in Vite.
+这个web项目是一个基于开源音乐api开发的手机端h5音乐平台。
+使用vue3+vant+pinia
 
 ## Recommended IDE Setup
 
@@ -37,7 +38,7 @@ npm run build
 ```
 ```
 TODO:
-    等待反馈，修改线上bug,优化喜欢模块的加载,请求优化
+    等待反馈，修改线上bug
 ```
 ```
     <!--（已完成） 播放量已修改,mv容器宽高已自适应,修改video的UI显示逻辑,将mv弹出层挂载到#app节点 -->
@@ -45,5 +46,6 @@ TODO:
     <!--（未完成） [需官方修复]修复歌单评论总数与可获取评论数不符的问题 -->
     <!--（已完成） 优化视频模块的显示逻辑 -->
     <!--（已完成） 为喜爱模块添加分页加载,提高加载速度;优化播放模块的数据添加方式 -->
+    <!--（已完成） 视频模块线上无法进入，视频模块请求顺序错乱 -->
 ```
 

@@ -22,7 +22,7 @@
                         </span>
                         <span class="midSpan">{{ info[i].name }}</span>
                         <!-- +info[i].duration / 1000 + 's'  -->
-                        <span>{{ celDuration(info, i) }}</span>
+                        <span>{{ info[i].celDuration }}</span>
                     </div>
                     <!-- 播放器 -->
                     <VideoPlayer :options="videoOptions[i]" :id="i" @play="onPlayerPlay($event)"></VideoPlayer>
@@ -40,7 +40,8 @@ import VideoPlayer from '../components/mv/VideoPlayer.vue';
 import { Vue3Marquee } from 'vue3-marquee'
 import 'vue3-marquee/dist/style.css'
 
-import * as dayjs from 'dayjs'
+// import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
 // import * as isLeapYear from 'dayjs/plugin/isLeapYear' // 导入插件
 import 'dayjs/locale/zh-cn' // 导入本地化语言
 
@@ -110,6 +111,18 @@ const getOneMV = (id) => {
         getPersonaMvAddr(id).then(result => res(result)).catch(err => console.log(err))
     })
 }
+
+// 格式化时间
+let celDuration = (i) => {
+    console.log(i, info.value);
+    let time = info.value[i].duration
+    console.log(time);
+    let times = dayjs(time).format('mm:ss')
+    console.log(info.value[i].duration);
+    console.log(times);
+    return times
+}
+
 // 获取所有的MV信息
 const getMvinfo = async () => {
     // 获取推荐mv的列表
@@ -120,28 +133,101 @@ const getMvinfo = async () => {
         // console.log(element);
     });
     console.log(show.value);
-    let mapData = data.result.map(async (item, i) => {
+    // let mapData = data.result.map(async (item, i) => {
 
+    //     info.value.push({ // mv信息
+    //         picUrl: item.picUrl, // 地址
+    //         artistName: item.artistName, // 歌手名
+    //         duration: item.duration, // 持续时间
+    //         name: item.name, // mv名字
+    //         playCount: item.playCount, // 播放次数
+    //     })
+
+    //     // 获取每个id的mv的播放地址
+    //     // let res = await getPersonaMvAddr(data.result[i].id)
+    //     let res = await getOneMV(data.result[i].id)
+    //     console.table(i + ':' + data.result[i].id + ':', res);
+    //     if (i === 0) {
+    //         videoOptions[0].poster = item.picUrl
+    //         videoOptions[0].sources[0].src = res.data.data.url
+
+    //         // show.value = true
+    //     } else {
+    //         videoOptions.push({
+    //             poster: item.picUrl,//
+    //             sources: [{ // 源地址
+    //                 src: res.data.data.url,
+    //                 type: "video/mp4",
+    //             }],
+    //             // fluid: true,
+    //             aspectRatio: "16:9",
+    //             width: "",
+    //             height: "",
+    //             autoplay: false,
+    //             muted: false,
+    //             loop: false,
+    //             preload: "auto",
+    //             language: "zh-CN",
+    //             playbackRates: [0.5, 1.0, 1.5, 2.0],
+    //             controls: true,
+    //             notSupportedMessage: "此视频暂无法播放，请稍后再试",
+    //             controlBar: {
+    //                 // timeDivider: true,
+    //                 // durationDisplay: true,
+    //                 // remainingTimeDisplay: false,
+    //                 // fullscreenToggle: true,
+    //                 children: [
+    //                     { name: 'playToggle' }, // 播放按钮
+    //                     { name: 'currentTimeDisplay' }, // 当前已播放时间
+    //                     { name: 'progressControl' }, // 播放进度条
+    //                     { name: 'durationDisplay' }, // 总时间
+    //                     { // 倍数播放
+    //                         name: 'playbackRateMenuButton',
+    //                         playbackRates: [0.5, 1.0, 1.5, 2.0],
+    //                     },
+    //                     {
+    //                         name: 'volumePanel', // 音量控制
+    //                         inline: false, // 不使用水平方式
+    //                     },
+    //                     { name: 'FullscreenToggle' } // 全屏
+    //                 ]
+    //             },
+    //         })
+
+    //     }
+
+    //     // if (i === 3) show.value = true
+    //     show.value[i] = true
+
+    //     return res.data.data
+    // })
+
+    let lenght = data.result.length
+    console.log(lenght);
+    for (let i = 0; i < lenght; i++) {
+        // data.result[i].id
         info.value.push({ // mv信息
-            picUrl: item.picUrl, // 地址
-            artistName: item.artistName, // 歌手名
-            duration: item.duration, // 持续时间
-            name: item.name, // mv名字
-            playCount: item.playCount, // 播放次数
+            picUrl: data.result[i].picUrl, // 地址
+            artistName: data.result[i].artistName, // 歌手名
+            duration: data.result[i].duration, // 持续时间
+            name: data.result[i].name, // mv名字
+            playCount: data.result[i].playCount, // 播放次数
         })
 
-        // 获取每个id的mv的播放地址
-        // let res = await getPersonaMvAddr(data.result[i].id)
-        let res = await getOneMV(data.result[i].id)
-        console.table(i + ':' + data.result[i].id + ':' , res);
+        console.log(info.value[i]);
+
+        let res = await getPersonaMvAddr(data.result[i].id)
+
+        console.log(res);
+
         if (i === 0) {
-            videoOptions[0].poster = item.picUrl
+            videoOptions[0].poster = data.result[i].picUrl
             videoOptions[0].sources[0].src = res.data.data.url
 
             // show.value = true
         } else {
             videoOptions.push({
-                poster: item.picUrl,//
+                poster: data.result[i].picUrl,//
                 sources: [{ // 源地址
                     src: res.data.data.url,
                     type: "video/mp4",
@@ -183,12 +269,17 @@ const getMvinfo = async () => {
 
         }
 
-        // if (i === 3) show.value = true
+
+        let Duration = celDuration(i)
+
+        info.value[i].celDuration = Duration
+
+        console.log(videoOptions[i]);
         show.value[i] = true
 
-        return res.data.data
-    })
-
+        console.log(show.value);
+    }
+    console.log(info.value);
 
 }
 getMvinfo()
@@ -214,18 +305,7 @@ const onPlayerPlay = (player) => {
 // VideoView.vue:197 aae: undefined
 // VideoView.vue:198 aae: 8
 
-// 格式化时间
 
-let celDuration = (a, i) => {
-
-    console.log(i, info.value);
-    let time = info.value[i].duration
-
-    let times = dayjs(time).format('mm:ss')
-    console.log(info.value[i].duration);
-    console.log(times);
-    return times
-}
 
 </script>
 <style lang="less" scoped>
