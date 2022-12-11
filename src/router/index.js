@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-15 18:26:11
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-07 16:54:57
+ * @LastEditTime: 2022-12-10 21:36:38
  * @FilePath: \yiyunMusic\music\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -17,9 +17,15 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      // redirect:'/home'
       name: 'home',
       component: HomeView
     },
+    // {
+    //   path: '/home',
+    //   name: 'Home',
+    //   component: HomeView
+    // },
     {
       path: '/about',
       name: 'about',

@@ -33,20 +33,19 @@
     </div>
 </template>
 <script setup>
-import { nextTick, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { getPersonaMv, getPersonaMvAddr } from '../request/api/home'
 import VideoPlayer from '../components/mv/VideoPlayer.vue';
 // 跑马灯
 import { Vue3Marquee } from 'vue3-marquee'
 import 'vue3-marquee/dist/style.css'
 
-// import * as dayjs from 'dayjs'
-import dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
 // import * as isLeapYear from 'dayjs/plugin/isLeapYear' // 导入插件
-import 'dayjs/locale/zh-cn' // 导入本地化语言
+// import 'dayjs/locale/zh-cn' // 导入本地化语言
 
 // dayjs.extend(isLeapYear) // 使用插件
-dayjs.locale('zh-cn') // 使用本地化语言
+// dayjs.locale('zh-cn') // 使用本地化语言
 
 // import { celDuration } from '../js/timeformat'; // 格式化视频时间
 
@@ -108,19 +107,26 @@ let videoOptions = reactive([{
 
 const getOneMV = (id) => {
     return new Promise((res, rej) => {
-        getPersonaMvAddr(id).then(result => res(result)).catch(err => console.log(err))
+        getPersonaMvAddr(id)
+        .then(result => res(result))
+        .catch(err => {console.log(err)})
     })
 }
 
 // 格式化时间
 let celDuration = (i) => {
     console.log(i, info.value);
-    let time = info.value[i].duration
-    console.log(time);
-    let times = dayjs(time).format('mm:ss')
-    console.log(info.value[i].duration);
-    console.log(times);
-    return times
+    let mss = info.value[i].duration
+    console.log(mss);
+    // let times = dayjs(time).format('mm:ss') // 线上报错
+    let s = mss / 1000 % 60
+    s = s < 10 ? '0' + s : s
+    let min = parseInt(mss / 1000 / 60 % 60)
+    min = min < 10 ? '0' + min : min
+    let h = parseInt(mss / 1000 / 60 / 60 % 24)
+    h = h < 10 ? '0' + h : h
+    console.log(Number(h) > 0 ? `${h}:${min}:${s}` : `${min}:${s}`);
+    return Number(h) > 0 ? `${h}:${min}:${s}` : `${min}:${s}`
 }
 
 // 获取所有的MV信息

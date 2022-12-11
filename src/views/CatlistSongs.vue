@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 13:56:53
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-04 01:41:01
+ * @LastEditTime: 2022-12-11 02:54:03
  * @FilePath: \yiyunMusic\music\src\views\CatlistSongs.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -22,7 +22,7 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { ref, watch } from 'vue';
+import { ref, watch,onActivated,onBeforeMount,onUnmounted } from 'vue';
 import MusicList from '../components/home/MusicList.vue';
 import { getSongsCatlist, getSongsCatlistAll } from '../request/api/home';
 import { usePlayListStore } from '../stores/playlist';
@@ -230,11 +230,21 @@ const onLoad = async () => {
         // console.log(11);
         setTimeout(() => {
             onLoad();
-        }, 20);
+        }, 100);
     }
     // console.log(options.value);
-    // console.log(hotSongList.value)
+    console.log(hotSongList.value)
 };
+console.log('3332fwsefwef');
+onBeforeMount(()=>{
+    console.log('onBeforeMount');
+})
+onActivated(()=>{
+    console.log('onActivated');
+})
+onUnmounted(()=>{
+    console.log('onUnmounted');
+})
 </script>
 <style lang="less" scoped>
 :deep(.van-nav-bar__title) {
