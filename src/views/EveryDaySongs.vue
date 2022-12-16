@@ -1,34 +1,16 @@
 <template>
     <div class="newSongsBox" ref="newSongsBoxRef">
         <div class="newSongsTop">
-            <svg class="icon" aria-hidden="true" @click="$router.push('/')">
+            <!-- <svg class="icon" aria-hidden="true" @click="$router.push('/')">
                 <use xlink:href="#icon-zuojiantou"></use>
-            </svg>
-            <h1>每日新歌推荐{{ limit }}首</h1>
+            </svg> -->
+            <!-- <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" /> -->
+            <navTop :title="('每日新歌推荐' + limit + '首')"></navTop>
+            <!-- <h1>每日新歌推荐{{ limit }}首</h1> -->
         </div>
         <div class="newSongsContain">
-            <!--  <div class="itemList">
-                <div class="item" v-for="(item, i) in searchList" :key="i">
-                    <div class="itemLeft" @click="updataIndex(item)">
-                        <span class="leftSpan">{{ i + 1 }}</span>
-                        <div>
-                            <p>{{ item.name }}</p>
-                            <div class="rightSpan">
-                                <span v-for="(item1, i) in item.ar" :key="i">{{ item1.name }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="itemRight">
-                        <svg class="icon" aria-hidden="true" v-if="item.mv != 0">
-                            <use xlink:href="#icon-shipin"></use>
-                        </svg>
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-liebiao"></use>
-                        </svg>
-                    </div>
-                </div>
-            </div> -->
-            <PlayerList :msg="searchList" :isFromEveryDaySongs="isFromEveryDaySongs" @updataIndex="updataIndex"></PlayerList>
+            <PlayerList :msg="searchList" :isFromEveryDaySongs="isFromEveryDaySongs" @updataIndex="updataIndex">
+            </PlayerList>
         </div>
     </div>
 </template>
@@ -36,13 +18,15 @@
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { getEveryDaySongs } from '../request/api/home';
 
-import { celDuration } from '../js/timeformat'; // 格式化歌曲时间，celDuration(info,i)
+// import { celDuration } from '../js/timeformat'; // 格式化歌曲时间，celDuration(info,i)
 
 import { usePlayListStore } from '../stores/playlist';
 import PlayerList from '../components/item/PlayerList.vue';
 import { onBeforeRouteUpdate } from 'vue-router';
+
 let storeState = usePlayListStore()
 let isFromEveryDaySongs = ref(true)
+// let title = ref(`每日新歌推荐`)
 // const list = ref([]);
 // const loading = ref(false);
 // const finished = ref(false);
@@ -94,9 +78,10 @@ let limit = ref(50)
 onMounted(() => {
     // 设置背景图片
     newSongsBoxRef.value.style.backgroundImage = `url(http://p1.music.126.net/HC0qtLUr3ciQSo-_q9SvwA==/109951168018756524.jpg?param=375y600)`
-    setTimeout(() => {
-        newSongsBoxRef.value.style.backgroundImage = `url(http://p1.music.126.net/HC0qtLUr3ciQSo-_q9SvwA==/109951168018756524.jpg?param=375y1200)`
-    }, 1000);
+    console.log(newSongsBoxRef.value.style);
+    // setTimeout(() => {
+    //     newSongsBoxRef.value.style.backgroundImage = `url(http://p1.music.126.net/HC0qtLUr3ciQSo-_q9SvwA==/109951168018756524.jpg?param=375y1200)`
+    // }, 1000);
 
 })
 
@@ -192,32 +177,34 @@ const clickPlay = (item) => {
 </script>
 <style lang="less" scoped>
 .newSongsBox {
-    width: 7.5rem;
+    // width: 7.5rem;
+    width: 100%;
     height: 100%;
     // margin-bottom: 70px;
     position: relative;
     box-sizing: border-box;
 
     .newSongsTop {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
 
-        .icon {
-            fill: #ccc;
-            width: .6rem;
-            height: .6rem;
-            margin: .1rem;
-            z-index: 1;
-            // position: absolute;
-            // top: 0;
-            // left: 0;
-        }
+        // display: flex;
+        // justify-content: flex-start;
+        // align-items: center;
 
-        h1 {
-            font-size: .55rem;
-            margin-left: .7rem;
-        }
+        // .icon {
+        //     fill: #ccc;
+        //     width: .6rem;
+        //     height: .6rem;
+        //     margin: .1rem;
+        //     z-index: 1;
+        //     // position: absolute;
+        //     // top: 0;
+        //     // left: 0;
+        // }
+
+        // h1 {
+        //     font-size: .55rem;
+        //     margin-left: .7rem;
+        // }
     }
 
     .newSongsContain {
@@ -308,5 +295,6 @@ const clickPlay = (item) => {
 
 
     }
+
 }
 </style>

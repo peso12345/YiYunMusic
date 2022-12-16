@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-17 15:23:25
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-29 15:28:11
+ * @LastEditTime: 2022-12-16 16:32:47
  * @FilePath: \yiyunMusic\music\src\components\item\ItemMusicTop.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -85,7 +85,7 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 import { onMounted, watch, ref, shallowRef } from 'vue';
 import fileDownload from "../../js/download.js";
 
@@ -164,7 +164,7 @@ let playcount = (count) => {
 
 // 下载
 let download = () => {
-   Toast('功能开发中...')
+   showToast('功能开发中...')
 }
 
 // shallowRef使用他减少性能消耗，不会响应式地追踪组件，不使用ref。

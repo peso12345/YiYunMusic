@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 18:52:39
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-04 16:49:15
+ * @LastEditTime: 2022-12-15 16:55:18
  * @FilePath: \yiyunMusic\music\src\components\home\MusicList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEiv
 -->
@@ -18,8 +18,8 @@
                 <van-swipe-item class="my-item" v-for="item in state.musicList" :key="item.id">
                     <RouterLink :to="{ path: '/itemMusic', query: { id: item.id } }">
                         <!-- 这个div必须添加，不然会导致css定位失效 -->
-                        <div>
-                            <img :src="item.picUrl + '?param=300y300'" alt="" srcset="" />
+                        <div :style="{ height: `${swipeWidth - swipeWidth * 0.14}px`}">
+                            <img :src="item.picUrl + '?param=300y300'" :alt="item.tag" srcset="" />
                             <span class="playCount">
                                 <svg class="icon" aria-hidden="true">
                                     <use xlink:href="#icon-gl-play"></use>
@@ -32,7 +32,6 @@
                 </van-swipe-item>
             </van-swipe>
         </div>
-
     </div>
 </template>
 <script setup>
@@ -47,14 +46,32 @@ let swipeWidth = ref(0)
 let swipeHeight = ref(0)
 let swipeRef = ref(null)
 
-watch([width, height], ([newVal, new1], [oldVal, old1]) => {
+const numShow = 2.5
+watch([width, height], ([newWidth, newHeight], [oldVal, old1]) => {
     // console.log('window resized');
-    // console.log(newVal);
-    //     //   console.log(new1);
-    swipeWidth.value = newVal / 2.5 + 10
-    swipeHeight.value = swipeWidth.value
-    // console.log(swipeWidth.value);
-    // console.log(swipeHeight.value);
+    // console.log(newWidth);
+    // console.log(newHeight);
+
+
+    if (newWidth < 1280) { // 适配大小，限制最宽1280
+        // swipeWidth.value = newVal / 2.5 + 10
+        swipeWidth.value = newWidth / numShow
+        swipeHeight.value = swipeWidth.value + 45
+
+        // console.log(swipeWidth.value);
+        // console.log(swipeHeight.value);
+    } else {
+        swipeWidth.value = 1280 / numShow
+        swipeHeight.value = Math.floor(1280 / 18 * 7)
+        // let a = Math.floor(1280 / 18 * 7)
+        // console.log(a,a,a,a);
+        // console.log(swipeWidth.value);
+        // console.log(swipeHeight.value);
+
+    }
+
+    console.log(swipeWidth.value);
+    console.log(swipeHeight.value);
 
     // console.log('swipeRef:',swipeRef.value);
     nextTick(() => {
@@ -86,13 +103,14 @@ onMounted(async () => {
         let { data } = await getMusicList()
         // console.log(data.result);
         state.musicList = data.result
-        // console.log(state.musicList);
+        console.log('state.musicList:',state.musicList);
     } else {
         // console.log('来自主页面外的数据');
         // state.musicList = props.options.
         // console.log(props.options);
         state.title = props.options.title
         state.musicList = props.options.playlists
+        // console.log(state.musicList);
     }
 })
 // watch(() => props.options?.playlists, (newVal, oldVal) => {
@@ -127,8 +145,9 @@ let playcount = (count) => {
 <style lang="less" scoped>
 .musicList {
     width: 100%;
-    height: 5rem;
+    height: 100%;
     padding: 0.2rem;
+    padding-bottom: 0;
     // margin-bottom: 140px;
 
     .musicTop {
@@ -136,27 +155,30 @@ let playcount = (count) => {
         height: 0.6rem;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: 0.2rem;
 
         .title {
-            font-size: 0.4rem;
-            font-weight: 900;
+            font-size: .36rem;
+            font-weight: 600;
             overflow: hidden;
         }
 
         .more {
             border: 1px solid #ccc;
-            text-align: center;
-            line-height: 0.6rem;
-            padding: 0 0.2rem;
-            border-radius: 0.4rem;
+            // text-align: center;
+            line-height: 0.4rem;
+            padding: 0 0.1rem;
+            border-radius: 0.2rem;
+            color: #666;
+            font-size: .24rem;
             overflow: hidden;
         }
     }
 
     .musicContent {
         width: 100%;
-        height: 4rem;
+        height: 100%;
 
         .my-Swiper {
             height: 100%;
@@ -168,13 +190,14 @@ let playcount = (count) => {
 
 
             .my-item {
-                width: 3rem;
+                // width: 3rem;
+                // height: 3rem;
                 position: relative;
 
 
                 img {
                     width: 100%;
-                    height: 3rem;
+                    height: 100%;
                     display: block;
                     border-radius: .2rem;
                 }
@@ -182,12 +205,13 @@ let playcount = (count) => {
                 .playCount {
                     position: absolute;
                     top: 2%;
-                    right: 2%;
+                    right: 4.5%;
                     color: rgb(255, 255, 255);
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-weight: 500;
+                    font-weight: 400;
+                    font-size: .23rem;
 
                     .icon {
                         width: .35rem;
@@ -197,7 +221,17 @@ let playcount = (count) => {
                     }
                 }
 
-                .name {}
+                .name {
+                    // z-index: 5000 !important;
+                    font-size: .26rem;
+                    font-weight: 500;
+                    width: 100%;
+                    height: 100%;
+                    // overflow: hidden;
+                    // -o-text-overflow: ellipsis;
+                    // text-overflow: ellipsis;
+                    // white-space: nowrap;
+                }
             }
         }
     }

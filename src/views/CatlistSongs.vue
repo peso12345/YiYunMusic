@@ -2,14 +2,15 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 13:56:53
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-11 02:54:03
+ * @LastEditTime: 2022-12-16 18:24:49
  * @FilePath: \yiyunMusic\music\src\views\CatlistSongs.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
     <div>
-        <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="$router.push('/')"
-            v-if="otherOptions.showTop" />
+        <!-- <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="$router.push('/')"
+            v-if="otherOptions.showTop" /> -->
+        <navTop :title="title" v-if="otherOptions.showTop"></navTop>
         <div class="listBox">
             <van-list v-model:loading="loading" :finished="finished" :finished-text="otherOptions.finishedText"
                 @load="onLoad">
@@ -22,10 +23,12 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { ref, watch,onActivated,onBeforeMount,onUnmounted } from 'vue';
+import { ref, watch, onActivated, onBeforeMount, onUnmounted } from 'vue';
 import MusicList from '../components/home/MusicList.vue';
 import { getSongsCatlist, getSongsCatlistAll } from '../request/api/home';
 import { usePlayListStore } from '../stores/playlist';
+import { showToast } from 'vant';
+
 
 const props = defineProps(['catOptions']);
 
@@ -53,6 +56,11 @@ const options = ref([{
     playlists: [],
 }])
 
+/**
+ * 描述
+ * @date 2022-12-12
+ * @returns {any}
+ */
 let getAllList = async () => {
     // 获取精品歌单标签列表
     let { data } = await getSongsCatlist()
@@ -115,6 +123,11 @@ getAllList()
 // 定义下标为0
 let index = 0;
 
+/**
+ * Description
+ * @returns {any}
+ */
+let countnum = 0
 const onLoad = async () => {
 
     // 异步更新数据
@@ -228,42 +241,40 @@ const onLoad = async () => {
         // loading.value = true;
         // 设置宏任务，让加载函数下一轮循环时再执行
         // console.log(11);
-        setTimeout(() => {
+        countnum++
+        let aTime = setTimeout(() => {
             onLoad();
         }, 100);
+        if (countnum > 3) {
+            countnum = 0
+            clearTimeout(aTime)
+            setTimeout(() => {
+                onLoad();
+            }, 3000)
+            console.log('chaoshi!!!!!>>>===>');
+            showToast('服务器无响应，请稍后重试！')
+        }
     }
     // console.log(options.value);
     console.log(hotSongList.value)
 };
 console.log('3332fwsefwef');
-onBeforeMount(()=>{
+onBeforeMount(() => {
     console.log('onBeforeMount');
 })
-onActivated(()=>{
+onActivated(() => {
     console.log('onActivated');
 })
-onUnmounted(()=>{
+onUnmounted(() => {
     console.log('onUnmounted');
 })
 </script>
 <style lang="less" scoped>
-:deep(.van-nav-bar__title) {
-    font-size: .45rem;
-}
-
-:deep(.van-nav-bar__text) {
-    font-size: .38rem;
-}
-
-:deep(.van-icon) {
-    font-size: .38rem;
-}
-
 .listBox {
     margin-bottom: 1.4rem;
 
     .listBoxItem {
-        padding-bottom: .4rem;
+        // padding-bottom: .2rem;
     }
 }
 </style>

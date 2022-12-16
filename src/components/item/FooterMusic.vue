@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-19 17:15:01
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-11-23 17:43:36
+ * @LastEditTime: 2022-12-16 16:33:00
  * @FilePath: \yiyunMusic\music\src\components\item\FooterMusic.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -38,7 +38,7 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { Toast } from 'vant';
+// import { showToast } from 'vant';
 import { nextTick, onMounted, onUpdated, ref, watch } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js';
 import MusicDetail from './MusicDetail.vue';
@@ -128,7 +128,9 @@ onUpdated(() => {
 </script>
 <style lang="less" scoped>
 .FootMusic {
+    // box-sizing: content-box;
     width: 100%;
+    max-width: 1280px;
     height: 1.4rem;
     background: #fff;
     position: fixed;

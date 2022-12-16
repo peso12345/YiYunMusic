@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-16 15:34:44
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-10 00:25:47
+ * @LastEditTime: 2022-12-16 16:41:03
  * @FilePath: \yiyunMusic\music\src\components\home\TopNav.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,6 +12,7 @@
             <svg class="icon" aria-hidden="true" @click="showSidebar = true">
                 <use xlink:href="#icon-liebiao"></use>
             </svg>
+            <!-- 弹出框&侧边框 -->
             <van-popup v-model:show="showSidebar" position="left" :style="{ width: '80%', height: '100%' }">
                 <van-sidebar v-model="active" @change="onChange">
                     <div :style="{ padding: '20px 12px' }" @click="router.push('/infoUser')">
@@ -27,7 +28,8 @@
                             <div class="imgtop-right">
                                 <div class="imgtop-right-content">
                                     <span class="name">{{ infoUser.data.profile.nickname }}</span>
-                                    <span><van-tag mark  plain type="success">LV.{{ infoUser.data?.level }}</van-tag></span>
+                                    <span><van-tag mark plain type="success">LV.{{ infoUser.data?.level
+                                    }}</van-tag></span>
                                 </div>
                                 <div class="imgtop-right-content">
                                     <span>今天是我们相遇的第<span class="day">{{ infoUser.data?.createDays }}</span>天</span>
@@ -60,7 +62,7 @@
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -84,9 +86,19 @@ const onChange = (index) => {
     console.log(index)
     router.push(`${routeInfo.value[index].path}`)
 };
-
+let todolist = 0;
+let timeclick = null;
 let toYunCun = () => {
-    Toast('云村暂未开放！')
+    showToast('云村暂未开放！')
+    todolist++;
+    timeclick = setTimeout(() => {
+        todolist = 0;
+    }, 2000);
+
+    if (todolist >= 5) {
+        router.push('/todolist')
+    }
+    console.log(todolist);
 }
 console.log(1111);
 
@@ -179,12 +191,14 @@ let quit = () => {
                 justify-content: center;
 
                 font-size: 0.3rem;
+
                 .name {
                     font-size: .33rem;
                     font-weight: 600;
                     padding-right: 5px;
                 }
-                .day{
+
+                .day {
                     color: skyblue;
                     padding: 0 3px;
                 }

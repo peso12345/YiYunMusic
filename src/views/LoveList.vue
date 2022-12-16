@@ -2,13 +2,16 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 01:45:12
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-10 00:17:07
+ * @LastEditTime: 2022-12-16 14:46:52
  * @FilePath: \yiyunMusic\music\src\views\PersonalFm.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div>
-    <van-nav-bar class="sizeBar" :title="('喜爱的歌曲' + songsNumber+'首')" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <!-- <van-nav-bar class="sizeBar" :title="('喜爱的歌曲' + songsNumber + '首')" left-text="返回" left-arrow
+      @click-left="onClickLeft" /> -->
+      <navTop :title="('喜爱的歌曲' + songsNumber + '首')"></navTop>
+
     <!-- <div class="songsTop">
       <svg class="icon" aria-hidden="true" @click="$router.push('/')">
         <use xlink:href="#icon-zuojiantou"></use>
@@ -20,7 +23,7 @@
     <PlayerList class="list" :msg="ListSongs" v-else></PlayerList>
     <!-- </KeepAlive> -->
     <van-pagination class="pages" v-model="currentPage" :total-items="songsNumber" :items-per-page="25"
-      :show-page-size="5" @change="onChange" v-show="!showList" force-ellipses />
+      :show-page-size="getPage()" @change="onChange" v-show="!showList" force-ellipses />
   </div>
 </template>
 <script setup>
@@ -31,6 +34,11 @@ import { useRouter } from 'vue-router'
 
 // 改造yinghua.js，并导入
 import { startSakura, stopp } from '../js/yinghua.js';
+
+// 获取浏览器窗口的视口宽度和高度，并在窗口大小变化时自动更新。
+import { useWindowSize } from '@vant/use';
+const { width, height } = useWindowSize();
+
 onMounted(() => {
   // 每次进入此组件前执行函数
   // yinghua()
@@ -51,6 +59,14 @@ let allData = ref([]) // 所有喜爱歌曲的id
 // let currentData = ref([]) // 当前页面的歌曲id
 let currentPage = ref(1)
 
+const getPage = () => {
+  let num = 1;
+  // console.log(width);
+  console.log(width.value);
+  width.value<280?num=1:width.value<320?num=3:num=5
+
+  return num
+}
 
 const onClickLeft = () => history.back();
 
@@ -58,6 +74,12 @@ const currentData = (num = 25) => { // 一页显示歌曲的数量
   return allData.value.slice(num * (currentPage.value - 1), num * currentPage.value)
 }
 
+/**
+ * 描述
+ * @date 2022-12-12
+ * @text 获取喜欢音乐列表
+ * @returns {any}
+ */
 const getLoves = async () => {
   // 获取喜欢的音乐列表
   let id = JSON.parse(localStorage.getItem('id'))
@@ -118,17 +140,7 @@ const onChange = async () => {
   // left: 0;
 }
 
-:deep(.van-nav-bar__title) {
-    font-size: .45rem;
-}
 
-:deep(.van-nav-bar__text) {
-    font-size: .38rem;
-}
-
-:deep(.van-icon) {
-    font-size: .38rem;
-}
 
 .songsTop {
   display: flex;
@@ -148,12 +160,15 @@ const onChange = async () => {
 
 .list {
   position: relative;
-  padding-bottom: 90px;
+  // padding-bottom: 320px;
 }
 
 .pages {
+  width: 100%;
   // position: absolute;
-  bottom: 72px;
+  // bottom: 72px;
   left: 0;
+  padding-bottom: 1.4rem;
+
 }
 </style>

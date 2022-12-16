@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-15 18:26:11
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-10 21:36:38
+ * @LastEditTime: 2022-12-12 22:18:28
  * @FilePath: \yiyunMusic\music\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -27,12 +27,12 @@ const router = createRouter({
     //   component: HomeView
     // },
     {
-      path: '/about',
-      name: 'about',
+      path: '/todolist',
+      name: 'todolist',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/TodoList.vue')
     },
     {
       path: '/itemMusic',
@@ -93,7 +93,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   state = usePlayListStore()
   // console.log(to.path);
-  if (to.path == '/login' || to.path == '/infoUser' || to.path == '/video') {
+  if (to.path == '/login' || to.path == '/infoUser' || to.path == '/video'|| to.path == '/todolist') {
     state.isFooterMusic = false;
   } else {
     state.isFooterMusic = true;

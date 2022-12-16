@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-23 16:45:59
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-05 18:47:09
+ * @LastEditTime: 2022-12-16 15:19:40
  * @FilePath: \yiyunMusic\music\src\views\InfoUser.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -37,10 +37,10 @@
                     <div>关注:</div><em>{{ user.data?.profile?.playlistCount }}</em>
                 </span>
             </div>
-        </div>
-        <div class="infoUserFooter">
-            <button @click="quit">退出登录</button>
-            <button @click="back">返回</button>
+            <div class="infoUserFooter">
+                <button @click="quit">退出登录</button>
+                <button @click="back">返回</button>
+            </div>
         </div>
     </div>
 </template>
@@ -74,7 +74,7 @@ console.log(user);
 // console.log(user.data.profile?.nickname);
 // console.log(user.data?.profile?.nickname);
 
-if(user.data?.profile == undefined || user.data?.profile == null || !state.getCookie()){ //如果profile不存在，返回登录页面
+if (user.data?.profile == undefined || user.data?.profile == null || !state.getCookie()) { //如果profile不存在，返回登录页面
     // console.log(1111);
     router.push('/login')
     // console.log(2222);
@@ -143,16 +143,17 @@ let city = () => {
 
 .box {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
     width: 100%;
     height: 100vh;
+    // overflow: auto;
 
     .infoUserTop {
         width: 100%;
-        height: 80vh;
+        height: 100%; // 
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -242,11 +243,15 @@ let city = () => {
     }
 
     .infoUserFooter {
-        height: 20vh;
+        height: 100%;
         width: 100%;
         display: flex;
         justify-content: space-around;
         align-items: flex-end;
+        position: relative;
+        bottom: 0;
+        left: 0;
+        padding: 0px;
 
         button {
             width: 50%;

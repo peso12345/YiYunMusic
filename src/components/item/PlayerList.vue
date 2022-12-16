@@ -31,8 +31,8 @@
     </div>
 </template>
 <script setup>
-// import 'vant/es/toast/style';
-import { Toast } from 'vant';
+// import 'vant/es/showToast/style';
+import { showToast } from 'vant';
 import { useRouter } from 'vue-router';
 import { usePlayListStore } from '../../stores/playlist';
 import { getMusicOk, getPersonaMvAddr } from '../../request/api/home';
@@ -136,7 +136,7 @@ let playMusic = async (i, item = 0) => { // item原为push进歌曲列表所用�
     if (res.data.success) {
         // if ((!item.noCopyrightRcmd) && (item.fee === 8 || item.fee === 0)) {
         if (item.fee == 1 || item.fee == 4) {
-            Toast('此为vip歌曲，请先开通vip或购买该专辑！')
+            showToast('此为vip歌曲，请先开通vip或购买该专辑！')
         } else {
             // 更新播放列表
             state.updataPlayList(props.msg);
@@ -144,7 +144,7 @@ let playMusic = async (i, item = 0) => { // item原为push进歌曲列表所用�
             state.updataPlayListIndex(i);
         }
     } else {
-        Toast(`${res.data.message}`);
+        showToast(`${res.data.message}`);
     }
 
 

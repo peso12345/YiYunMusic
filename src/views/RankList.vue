@@ -1,9 +1,14 @@
 <template>
     <div>
-        <van-nav-bar class="barTopFiex" :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" />
+        <!-- <van-nav-bar class="barTopFiex" :title="title" left-text="返回" left-arrow @click-left="$router.push('/')" /> -->
+        <navTop class="barTopFiex" :title="title" :navTopdata="navTopdata">
+            <em>{{ navTopName }}</em>
+        </navTop>
+
         <div class="rankListBox">
-            <van-swipe ref="swipeRef" class="mySwiper" @change="onChange" :loop="false" :width="320" :autoplay="0"
-                :show-indicators="false">
+
+            <van-swipe ref="swipeRef" class="mySwiper" @change="onChange" :loop="false" :width="swipeWidth"
+                :autoplay="0" :show-indicators="false">
                 <van-swipe-item class="mySwiperItem" v-for="(item, i) in datas" :key="item">
                     <div class="box">
                         <div class="boxItemTop">
@@ -28,27 +33,66 @@
                         </div>
                     </div>
                 </van-swipe-item>
+
             </van-swipe>
+            <van-back-top right="10vw" bottom="20vh">返回顶部</van-back-top>
         </div>
     </div>
     <!-- 榜单结束 -->
 </template>
 <script setup>
 import { computed } from '@vue/reactivity';
-import { ref, watch } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import PlayerList from '../components/item/PlayerList.vue';
 import { getAllRankList } from '../request/api/home';
 import { getMusicItemListSong } from '../request/api/item';
 import { usePlayListStore } from '../stores/playlist';
+// import { BackTop } from 'vant';
+
+// 获取浏览器窗口的视口宽度和高度，并在窗口大小变化时自动更新。
+import { useWindowSize } from '@vant/use';
+const { width, height } = useWindowSize();
 
 let state = usePlayListStore()
 let swipeRef = ref(null)
+let navTopName = ref('飙升榜')
+let navTopdata = ref({})
 // console.log('swipeRef:',swipeRef.value);
 
 // let active = computed(() => {
 //     console.log(swipeRef.value?.state?.active);
 //     return swipeRef.value?.state?.active
 // })
+let swipeWidth = ref(0)
+// let swipeHeight = ref(0)
+console.log(swipeRef);
+watch([width, height], ([newWidth, newHeight], [oldVal, old1]) => {
+    // console.log('window resized');
+    console.log(newWidth);
+    console.log(newHeight);
+    // swipeWidth.value = newHeight / 5
+    if (newWidth < 1280) { // 适配大小，限制最宽1280
+        swipeWidth.value = Math.floor(newWidth * 0.812)
+    } else {
+        swipeWidth.value = Math.floor(1280 / 2.01)
+    }
+    // console.log(swipeWidth.value);
+    // console.log(swipeHeight.value);
+
+    // console.log('swipeRef:',swipeRef.value);
+    nextTick(() => {
+        // 等待dom创建完毕
+        // console.log('swipeRef:',swipeRef.value);
+        // 刷新swipe
+        swipeRef.value?.resize()
+    })
+    // setTimeout(()=>{
+    //     // 等待dom创建完毕
+    //     // console.log('swipeRef:',swipeRef.value);
+    //     swipeRef.value?.resize()
+    // },0)
+}, { immediate: true });
+
 
 let show = ref(false)
 let showMore = ref(true)
@@ -144,7 +188,7 @@ let getSongs = async (index, id = datas.value[0].id, name, limit = 20, offset = 
         resolve()
         setTimeout(() => {
             show.value = true
-        }, 50);
+        }, 80);
     })
 }
 // 获取各个榜单歌曲信息
@@ -188,7 +232,18 @@ watch(() => swipeRef.value?.state?.active, (newVal, old) => {
     console.log('开始加载序号' + (active + 1) + '的数据');
 
     getAllSongs(active + 1, active + 1, active + 2)
+
+    // 标题切换
+    navTopName.value = datas.value[active].name
+    console.log('获取标题:', navTopName.value);
+    console.log('获取标题:', swipeRef.value);
+    navTopdata.value = {
+        active: active,
+        name: navTopName.value
+    }
 })
+
+
 
 let toTop = () => {
     window.scrollTo({
@@ -215,19 +270,13 @@ let playcount = (count) => {
 }
 </script>
 
+<style lang="less">
+.van-back-top {
+    width: 1.6rem;
+    opacity: 0.77;
+}
+</style>
 <style lang="less" scoped>
-:deep(.van-nav-bar__title) {
-    font-size: .45rem;
-}
-
-:deep(.van-nav-bar__text) {
-    font-size: .38rem;
-}
-
-:deep(.van-icon) {
-    font-size: .38rem;
-}
-
 .barTopFiex {
     position: sticky;
     top: 0;

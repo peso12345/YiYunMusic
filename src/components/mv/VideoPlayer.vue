@@ -33,7 +33,7 @@ import 'video.js/dist/video-js.css';
 
 // City
 // import '@videojs/themes/dist/city/index.css';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 
 
 // Forest
@@ -123,7 +123,7 @@ onMounted(() => {
             videojs.log('播放已暂停!');
         })
         player.value.on("stalled", function () {
-            Toast("网速异常！请稍后...");
+            showToast("网速异常！请稍后...");
         })
 
         // How about an event listener?<br>  // 如何使用事件监听？

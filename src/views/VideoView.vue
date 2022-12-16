@@ -114,6 +114,12 @@ const getOneMV = (id) => {
 }
 
 // 格式化时间
+
+/**
+ * Description
+ * @param {any} i
+ * @returns {any}
+ */
 let celDuration = (i) => {
     console.log(i, info.value);
     let mss = info.value[i].duration
@@ -129,6 +135,11 @@ let celDuration = (i) => {
     return Number(h) > 0 ? `${h}:${min}:${s}` : `${min}:${s}`
 }
 
+/**
+ * 描述
+ * @date 2022-12-12
+ * @returns {any}
+ */
 // 获取所有的MV信息
 const getMvinfo = async () => {
     // 获取推荐mv的列表
@@ -291,6 +302,12 @@ const getMvinfo = async () => {
 getMvinfo()
 console.log('object.173');
 
+/**
+ * 描述
+ * @date 2022-12-12
+ * @param {any} player
+ * @returns {any}
+ */
 // 播放回调
 const onPlayerPlay = (player) => {
     console.log('player play!', player)

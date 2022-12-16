@@ -75,7 +75,7 @@
                     <component :is="talkAboutComponent" :alldata="playerSongThisTime" v-if="isTalkShow"></component>
                 </van-popup>
                 <!-- 循环播放列表 -->
-                <svg class="icon" aria-hidden="true" @click="Toast('暂未开放！')">
+                <svg class="icon" aria-hidden="true" @click="showToast('暂未开放！')">
                     <use xlink:href="#icon-liebiao-"></use>
                 </svg>
             </div>
@@ -85,7 +85,7 @@
             </div>
             <div class="footFooter">
                 <!-- 循环模式 -->
-                <svg class="icon" aria-hidden="true" @click="Toast('暂未开放！')">
+                <svg class="icon" aria-hidden="true" @click="showToast('暂未开放！')">
                     <use xlink:href="#icon-xunhuan"></use>
                 </svg>
                 <!-- 上一首 -->
@@ -105,7 +105,7 @@
                     <use xlink:href="#icon-xiayigexiayishou"></use>
                 </svg>
                 <!-- 当前播放列表 -->
-                <svg class="icon" aria-hidden="true" @click="Toast('暂未开放！')">
+                <svg class="icon" aria-hidden="true" @click="showToast('暂未开放！')">
                     <use xlink:href="#icon-gl-playlistMusic"></use>
                 </svg>
             </div>
@@ -119,7 +119,7 @@ import 'vue3-marquee/dist/style.css'
 import { computed } from '@vue/reactivity';
 import { onMounted, watch, ref, onUpdated, shallowRef, defineAsyncComponent } from 'vue';
 import { usePlayListStore } from '../../stores/playlist.js'
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 import { getMusicOk, getLoveList } from '../../request/api/home';
 import { getLoveMusic, getDownloadSong } from '../../request/api/item';
 import { useRouter } from 'vue-router';
@@ -292,10 +292,10 @@ let goPlay = async (i) => {
         console.log('开始播放:' + state.playlist[index].name);
     } else {
         if (res.data.message != 'ok') {
-            Toast(`${res.data.message}，即将播放下一首！`);
+            showToast(`${res.data.message}，即将播放下一首！`);
         } else {
             console.log('vip歌曲?:', state.playlist[index].name);
-            Toast(`该歌曲为vip歌曲，即将播放下一首！`);
+            showToast(`该歌曲为vip歌曲，即将播放下一首！`);
 
         }
         timer = setTimeout(() => {
@@ -328,7 +328,7 @@ let findLoveSong = async () => {
         isLove.value = data.ids.includes(musicList.value.id)
         console.log(isLove.value, '喜爱的歌曲:', musicList.value.name);
     } else {
-        // Toast('没有登录，无法获取喜爱的歌曲信息！')
+        // showToast('没有登录，无法获取喜爱的歌曲信息！')
         console.log('没有登录，无法获取喜爱的歌曲信息！');
 
     }
@@ -352,10 +352,10 @@ let toLove = async (like) => {
             // 查询有没有添加到喜欢列表里
             // findLoveSong()
         } else {
-            Toast('操作失败，请稍后再试！')
+            showToast('操作失败，请稍后再试！')
         }
     } else {
-        Toast('请先登录！')
+        showToast('请先登录！')
         two++;
         if (two >= 2) {
             setTimeout(() => {
@@ -401,7 +401,7 @@ let toTalkAbout = () => {
 
 // let aQRcodeShow = ref(false)
 // const onSelect = (option) => {
-//     Toast(option.name);
+//     showToast(option.name);
 //     if (option.name === '微信') {
 //         window.open('https://weixin.qq.com/')
 //     }
@@ -419,10 +419,10 @@ let toTalkAbout = () => {
 //         target.select() // 选中input
 //         if (document.execCommand('Copy')) {
 //             document.execCommand('Copy') // 执行浏览器复制命令
-//             Toast('复制成功')
+//             showToast('复制成功')
 //             target.remove()
 //         } else {
-//             Toast('复制失败，请使用二维码分享！')
+//             showToast('复制失败，请使用二维码分享！')
 //         }
 
 //     }
@@ -576,8 +576,11 @@ let toTalkAbout = () => {
     flex-direction: column;
     align-items: center;
     margin-top: .2rem;
-    overflow: scroll;
     position: relative;
+
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+    overflow: scroll;
 
     @color: rgba(7, 7, 7, 0.774);
 
@@ -585,8 +588,7 @@ let toTalkAbout = () => {
         width: 0 !important
     }
 
-    -ms-overflow-style: none;
-    overflow: -moz-scrollbars-none;
+
 
     div {
         position: fixed;
