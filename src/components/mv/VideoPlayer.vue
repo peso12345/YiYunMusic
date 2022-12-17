@@ -14,7 +14,7 @@
         <!-- videojs-mobile-ui  -->
         <!-- <video :id="`my-video-${props.id}`" class="video-js vjs-theme-city videojs-mobile-ui vjs-big-play-centered"> -->
         <video :ref="`videoRef${props.id}`" :id="`my-video-${props.id}`"
-            :style="{ height: '100vw/16*9', width: '100vw' }" class="video-js vjs-default-skin vjs-big-play-centered"
+            :style="{ height: '100vw/16*9', width: '100%' }" class="video-js vjs-default-skin vjs-big-play-centered"
             playsinline="true" webkit-playsinline="true">
             <!-- <source :src="info.sources[0].src" :type="info.sources[0].type"> -->
             <p class="vjs-no-js">
