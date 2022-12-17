@@ -50,7 +50,7 @@ let isVideoShow = ref([])
 let info = computed(() => {
     console.log('object111:', props.msg);
     if (props.msg) {
-        props.msg.forEach((element,i) => {
+        props.msg.forEach((element, i) => {
             // isVideoShow.value.push(Boolean(element.mv))
             // 初始化，隐藏所有mv弹窗
             // isVideoShow.value.push(false)
@@ -96,27 +96,27 @@ let videoOptions = reactive([{
     //     fullscreenToggle: true, // 是否显示全屏按钮
     // },
     controlBar: {
-                    // timeDivider: true,
-                    // durationDisplay: true,
-                    // remainingTimeDisplay: false,
-                    // fullscreenToggle: true,
-                    children: [
-                        { name: 'playToggle' }, // 播放按钮
-                        { name: 'currentTimeDisplay' }, // 当前已播放时间
-                        { name: 'progressControl' }, // 播放进度条
-                        { name: 'durationDisplay' }, // 总时间
-                        // { name: 'remainingTimeDisplay' }, // 总时间
-                        { // 倍数播放
-                            name: 'playbackRateMenuButton',
-                            playbackRates: [0.5, 1.0, 1.5, 2.0],
-                        },
-                        {
-                            name: 'volumePanel', // 音量控制
-                            inline: false, // 不使用水平方式
-                        },
-                        { name: 'FullscreenToggle' } // 全屏
-                    ]
-                },
+        // timeDivider: true,
+        // durationDisplay: true,
+        // remainingTimeDisplay: false,
+        // fullscreenToggle: true,
+        children: [
+            { name: 'playToggle' }, // 播放按钮
+            { name: 'currentTimeDisplay' }, // 当前已播放时间
+            { name: 'progressControl' }, // 播放进度条
+            { name: 'durationDisplay' }, // 总时间
+            // { name: 'remainingTimeDisplay' }, // 总时间
+            { // 倍数播放
+                name: 'playbackRateMenuButton',
+                playbackRates: [0.5, 1.0, 1.5, 2.0],
+            },
+            {
+                name: 'volumePanel', // 音量控制
+                inline: false, // 不使用水平方式
+            },
+            { name: 'FullscreenToggle' } // 全屏
+        ]
+    },
 }])
 
 let playMusic = async (i, item = 0) => { // item原为push进歌曲列表所用，现未启用
@@ -195,7 +195,8 @@ const onPlayerPlay = (player) => {
 @colorlistRight: rgb(136, 139, 141);
 
 .itemList {
-    padding: 0 .2rem 1.4rem;
+    // padding: 0 .2rem 1.4rem;
+    padding: 0 .2rem;
 
     .icon {
         padding: .04rem;
