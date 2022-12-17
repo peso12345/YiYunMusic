@@ -38,6 +38,14 @@
             <img :src="musicList.al.picUrl + '?param=300y300'" alt="" class="img_ar"
                 :class="{ img_ar_active: !isbtnShow, img_ar_paused: isbtnShow }" @click="isLyricShow = true">
         </div>
+        <!-- TODO：可添加一个透明层，覆盖在旋转动画上，因为v-show切换后会让动画重新渲染 -->
+        <!-- <div class="detailContent" v-show="!isLyricShow" :style="{opacity:0}">
+            <img src="../../assets/needle-ab.png" alt="" class="img_needle" :class="{ img_needle_active: !isbtnShow }">
+            <img src="../../assets/yuan.png" alt="" class="img_cd">
+            <img :src="musicList.al.picUrl + '?param=300y300'" alt="" class="img_ar"
+                :class="{ img_ar_active: !isbtnShow, img_ar_paused: isbtnShow }" @click="isLyricShow = true">
+        </div> -->
+
         <div class="musicLyric" v-show="isLyricShow" ref="musicLyricref">
             <div @click="isLyricShow = false">
                 <svg class="icon" aria-hidden="true">
@@ -82,6 +90,11 @@
             <div class="footContant">
                 <!-- 进度条 -->
                 <input type="range" class="range" min="0" :max="duration" v-model="state.currentTime" step="0.05">
+                <!-- 播放时间 -->
+                <div>
+                    <span>{{ celDuration(state.currentTime * 1000) }}</span>
+                    <span>{{ celDuration(duration * 1000) }}</span>
+                </div>
             </div>
             <div class="footFooter">
                 <!-- 循环模式 -->
@@ -127,6 +140,7 @@ import { useRouter } from 'vue-router';
 import fileDownload from "../../js/download.js";
 
 const props = defineProps(['musicList', 'isbtnShow', 'play', 'addDuration']);
+const emit = defineEmits(['changeCurrentTime'])
 
 let router = useRouter()
 
@@ -138,7 +152,7 @@ let router = useRouter()
 // dayjs.locale('zh-cn') // 使用本地化语言
 
 
-
+let setOpacity = ref(1)
 let state = usePlayListStore()
 let isLyricShow = ref(false)
 let musicLyricref = ref(null)
@@ -149,8 +163,33 @@ let isTalkShow = ref(false)
 const showShare = ref({ show: false });
 // let checkPoint = ref(0) // 喜欢列表的检查点（时间戳）
 // props.addDuration()
+// let setTimes = ref(0)
 
 watch(() => state.currentTime, (newVal, b) => {
+
+    // console.log(newVal, b, newVal - b);
+    if (Math.abs(newVal - b) > 0.5) { // 进度条改变当前播放时间
+        changeTime(state.currentTime)
+
+        // play.value(celDuration(state.currentTime * 1000)) // 为啥可以传参给父组件？查询官网文档，发现props可以传递（因为 JavaScript 的对象和数组是按引用传递），但不建议
+        // props.play(celDuration(state.currentTime * 1000))
+
+        // if (!state.isbtnShow) {
+        //     state.updataIsbtnShow(true)
+        //     setTimeout(() => {
+        //         state.updataIsbtnShow(false)
+        //     }, 100);
+        // } else {
+        //     setTimeout(() => {
+        //         state.updataIsbtnShow(true)
+        //     }, 100);
+        // }
+    }
+
+    // if(state.currentTime>40){
+    //     showToast(`${state.currentTime}`)
+    //     changeTime(state.currentTime+1)
+    // }
     let p = document.querySelector('p.active')
     // console.log([p]);
     // console.log(p.offsetTop);
@@ -171,12 +210,14 @@ watch(() => state.currentTime, (newVal, b) => {
     }
     // 循环播放
     if (newVal === duration.value) {
-
+        state.updataIsbtnShow(true)
         if (state.playListIndex === state.playlist.length - 1) {
             state.updataPlayListIndex(0)
             play.value()
+            state.updataIsbtnShow(false)
         } else {
             state.updataPlayListIndex(state.playListIndex + 1)
+            state.updataIsbtnShow(false)
         }
     }
 })
@@ -214,6 +255,7 @@ let musicList = computed(() => {
 })
 let isbtnShow = computed(() => {
     // console.log('computed.isbtnShow:', props.isbtnShow);
+    // console.log('computed.isbtnShow:', state.isbtnShow);
     return props.isbtnShow
 })
 let play = computed(() => {
@@ -390,6 +432,45 @@ let toTalkAbout = () => {
     })
 }
 
+const changeTime = (setTimes) => {
+    emit('changeCurrentTime', setTimes)
+}
+// 格式化时间
+const celDuration = (mss) => { // 单位：毫秒
+    let s = mss / 1000 % 60;
+    // console.log(s);
+    s = s < 10 ? '0' + Math.floor(s) : Math.floor(s)
+    // console.log(Math.ceil(s));
+    let min = parseInt(mss / 1000 / 60 % 60)
+    min = min < 10 ? '0' + min : min
+    let h = parseInt(mss / 1000 / 60 / 60 % 24)
+    h = h < 10 ? '0' + h : h
+    // console.log(Number(h) > 0 ? `${h}:${min}:${s}` : `${min}:${s}`);
+    return Number(h) > 0 ? `${h}:${min}:${s}` : `${min}:${s}`
+}
+// const debounce = (fn, times) => {
+//     let time = times;
+//     return () => {
+//         setTimeout(() => {
+//             fn()
+//         }, time);
+//     }
+
+
+// }
+// const throttle = (func, wait) => {
+//     let previous = 0;
+//     return function () {
+//         let now = Date.now();
+//         let context = this;
+//         let args = arguments;
+//         if (now - previous > wait) {
+//             func.apply(context, args);
+//             previous = now;
+//         }
+//     }
+// }
+
 // // 分享面板
 // const showShare = ref(false);
 // const options = [
@@ -502,6 +583,7 @@ let toTalkAbout = () => {
 }
 
 .detailContent {
+    // opacity: 1;
     width: 100%;
     height: 9rem;
     display: flex;
@@ -646,6 +728,11 @@ let toTalkAbout = () => {
         .range {
             width: 100%;
             height: .06rem;
+        }
+
+        div {
+            display: flex;
+            justify-content: space-between;
         }
     }
 

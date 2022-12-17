@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-19 17:15:01
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-16 16:33:00
+ * @LastEditTime: 2022-12-17 13:54:08
  * @FilePath: \yiyunMusic\music\src\components\item\FooterMusic.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -32,7 +32,7 @@
         </audio>
         <van-popup v-model:show="state.detailShow" position="right" :style="{ height: '100%', width: '100%' }">
             <MusicDetail :musicList="state.playlist[state.playListIndex]" :play="play" :isbtnShow="show"
-                :addDuration="addDuration" />
+                :addDuration="addDuration" @changeCurrentTime="changeCurrentTime" />
         </van-popup>
     </div>
 </template>
@@ -60,8 +60,10 @@ let audio = ref(null)
 // })
 
 let interVal = 0;
-let play = () => {
+let play = (yy) => {
+    console.log(yy);
     console.log([audio.value]);
+    // audio.value.currentTime = 30
     if (audio.value.paused) {
         audio.value.play();
         state.updataIsbtnShow(false)
@@ -103,6 +105,11 @@ let show = computed(() => {
     return state.isbtnShow
 })
 
+const changeCurrentTime = (time) => {
+    console.log('footmusic:', time);
+    audio.value.currentTime = time
+}
+
 // 监听数组下标，（点击）改变则自动播放
 watch([() => state.playListIndex, () => state.playlist], (newval, oldval) => {
     // console.log(newval);
@@ -113,6 +120,9 @@ watch([() => state.playListIndex, () => state.playlist], (newval, oldval) => {
         addDuration()
         updataTime()
     }
+})
+watch(() => audio.value?.currentTime, (newVal, old) => {
+    console.log('newVal:', newVal);
 })
 onMounted(() => {
     state.getLyric(state.playlist[state.playListIndex].id)
