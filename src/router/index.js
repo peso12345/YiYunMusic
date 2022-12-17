@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-10-15 18:26:11
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-12 22:18:28
+ * @LastEditTime: 2022-12-18 02:43:32
  * @FilePath: \yiyunMusic\music\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -93,7 +93,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   state = usePlayListStore()
   // console.log(to.path);
-  if (to.path == '/login' || to.path == '/infoUser' || to.path == '/video'|| to.path == '/todolist') {
+  if (to.path == '/login' || to.path == '/infoUser' || to.path == '/video' || to.path == '/todolist') {
     state.isFooterMusic = false;
   } else {
     state.isFooterMusic = true;

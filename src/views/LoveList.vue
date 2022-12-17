@@ -2,7 +2,7 @@
  * @Author: peso12345 157223121@qq.com
  * @Date: 2022-11-04 01:45:12
  * @LastEditors: peso12345 157223121@qq.com
- * @LastEditTime: 2022-12-16 14:46:52
+ * @LastEditTime: 2022-12-18 02:47:46
  * @FilePath: \yiyunMusic\music\src\views\PersonalFm.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,7 +10,7 @@
   <div>
     <!-- <van-nav-bar class="sizeBar" :title="('喜爱的歌曲' + songsNumber + '首')" left-text="返回" left-arrow
       @click-left="onClickLeft" /> -->
-      <navTop :title="('喜爱的歌曲' + songsNumber + '首')"></navTop>
+    <navTop :title="('喜爱的歌曲' + songsNumber + '首')"></navTop>
 
     <!-- <div class="songsTop">
       <svg class="icon" aria-hidden="true" @click="$router.push('/')">
@@ -63,7 +63,7 @@ const getPage = () => {
   let num = 1;
   // console.log(width);
   console.log(width.value);
-  width.value<280?num=1:width.value<320?num=3:num=5
+  width.value < 280 ? num = 1 : width.value < 320 ? num = 3 : num = 5
 
   return num
 }
@@ -113,6 +113,7 @@ const getLoves = async () => {
 getLoves()
 
 const onChange = async () => {
+
   // console.log(currentPage.value);
   // console.log(currentData());
   // 获取当前要展示的所有歌曲id
@@ -126,6 +127,11 @@ const onChange = async () => {
   ListSongs.value = res.data.songs
   // 显示列表
   showList.value = false
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
 }
 </script>
 <style lang="less" scoped>
