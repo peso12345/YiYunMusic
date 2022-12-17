@@ -25,9 +25,9 @@
                                 <PlayerList :msg="listSong[i]"></PlayerList>
                                 <div class="boxItemContainButtom">
                                     <h2 class="boxBottom" @click="getSongs(i, datas[i].id, datas[i].name, 20, 20)"
-                                        v-if="showMore">查看更多
+                                        v-if="showMore = true">查看更多
                                     </h2>
-                                    <h2 class="boxBottom" @click="toTop" v-else>回到顶部</h2>
+                                    <!-- <h2 class="boxBottom" @click="toTop" v-else>回到顶部</h2> -->
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                 </van-swipe-item>
 
             </van-swipe>
-            <van-back-top right="10vw" bottom="20vh">返回顶部</van-back-top>
+            <van-back-top right="0vw" bottom="20vh" offset="1200">返回顶部</van-back-top>
         </div>
     </div>
     <!-- 榜单结束 -->
@@ -51,6 +51,7 @@ import { usePlayListStore } from '../stores/playlist';
 
 // 获取浏览器窗口的视口宽度和高度，并在窗口大小变化时自动更新。
 import { useWindowSize } from '@vant/use';
+import { showToast } from 'vant';
 const { width, height } = useWindowSize();
 
 let state = usePlayListStore()
@@ -167,6 +168,7 @@ let getSongs = async (index, id = datas.value[0].id, name, limit = 20, offset = 
             max.value[index] = listSong.value[index].length
             console.log(max.value[index]);
             console.log(222);
+            showToast('没有更多了！')
             showMore.value = false
             return
         }
@@ -273,7 +275,9 @@ let playcount = (count) => {
 <style lang="less">
 .van-back-top {
     width: 1.6rem;
-    opacity: 0.77;
+    height: 0.7rem;
+    // opacity: 0.77;
+    background-color:skyblue;
 }
 </style>
 <style lang="less" scoped>
@@ -337,20 +341,19 @@ let playcount = (count) => {
 
                     .boxItemContainButtom {
                         width: 100%;
-                        height: 36px;
+                        height: 50px;
                         position: relative;
-                        top: 0;
-                        left: 0;
-
+                        // top: 0;
+                        // left: 0;
 
                         .boxBottom {
                             color: skyblue;
                             // width: 100%;
                             // height: 1rem;
                             position: absolute;
-                            bottom: 20px;
+                            top: 50%;
                             left: 50%;
-                            transform: translate(-50%, 0);
+                            transform: translate(-50%, -50%);
                         }
                     }
 
