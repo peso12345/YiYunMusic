@@ -339,9 +339,8 @@ let playcount = (count) => {
                         width: 100%;
                         height: 36px;
                         position: relative;
-                        // top: 0;
-                        // left: 0;
-                        margin: 0.3rem 0;
+                        top: 0;
+                        left: 0;
 
 
                         .boxBottom {
@@ -349,7 +348,7 @@ let playcount = (count) => {
                             // width: 100%;
                             // height: 1rem;
                             position: absolute;
-                            bottom: 0px;
+                            bottom: 20px;
                             left: 50%;
                             transform: translate(-50%, 0);
                         }
