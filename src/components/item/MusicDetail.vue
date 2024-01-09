@@ -137,7 +137,7 @@ import { getMusicOk, getLoveList } from '../../request/api/home';
 import { getLoveMusic, getDownloadSong } from '../../request/api/item';
 import { useRouter } from 'vue-router';
 
-import fileDownload from "../../js/download.js";
+// import fileDownload from "../../js/download.js";
 
 const props = defineProps(['musicList', 'isbtnShow', 'play', 'addDuration']);
 const emit = defineEmits(['changeCurrentTime'])
@@ -418,7 +418,7 @@ let downLoadSong = async () => {
     // window.open(urls, '_blank');
     // window.location.href = urls;
     // 跨域资源，只传url
-    fileDownload(urls)
+    // fileDownload(urls)
 
 }
 // 动态引入组件
