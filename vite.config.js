@@ -40,7 +40,7 @@ export default defineConfig({
   },
   // 静态资源基础路径 base: './' || '',
   //  base: process.env.NODE_ENV === 'production' ? "'"+import.meta.env.VITE_BASE_URL+"'" : '/',
-  base: process.env.NODE_ENV === 'production' ? '/musicUI/' : '/',
+  base: process.env.NODE_ENV === 'production' ? './' : '/',
   build: {
     // 构建后是否生成 source map 文件,只是 bundle 文件中相应的注释将不被保留。
     sourcemap: false,
