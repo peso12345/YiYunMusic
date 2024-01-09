@@ -8,7 +8,7 @@
  */
 import axios from 'axios';
 let service = axios.create({
-  baseURL: 'http://43.138.175.144:3005/',
+  baseURL: 'https://music-jzw2.onrender.com/',
   timeout: 5000,
   withCredentials: false
 });
