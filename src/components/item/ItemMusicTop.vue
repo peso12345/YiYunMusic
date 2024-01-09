@@ -87,7 +87,7 @@
 import { computed } from '@vue/reactivity';
 import { showToast } from 'vant';
 import { onMounted, watch, ref, shallowRef } from 'vue';
-import fileDownload from "../../js/download.js";
+// import fileDownload from "../../js/download.js";
 
 // props传值，判断数据是否获取到值
 let props = defineProps(['playlist'])
