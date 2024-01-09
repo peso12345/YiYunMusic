@@ -33,7 +33,7 @@ import { getLoveList, getLoveListAndThen } from '../request/api/home';
 import { useRouter } from 'vue-router'
 
 // 改造yinghua.js，并导入
-import { startSakura, stopp } from '../js/yinghua.js';
+// import { startSakura, stopp } from '../js/yinghua.js';
 
 // 获取浏览器窗口的视口宽度和高度，并在窗口大小变化时自动更新。
 import { useWindowSize } from '@vant/use';
@@ -42,13 +42,13 @@ const { width, height } = useWindowSize();
 onMounted(() => {
   // 每次进入此组件前执行函数
   // yinghua()
-  startSakura()
+  // startSakura()
 })
 onBeforeUnmount(() => {
   // 退出组件前，删除canvas_sakura元素
   // let aa = document.getElementById('canvas_sakura')
   // aa.remove()
-  stopp()
+  // stopp()
 })
 
 let ListSongs = ref([])
