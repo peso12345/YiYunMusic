@@ -9,8 +9,8 @@
 import axios from 'axios';
 let service = axios.create({
   baseURL: 'https://music-jzw2.onrender.com/',
-  timeout: 15000,
-  withCredentials: false
+  timeout: 30000,
+  withCredentials: true
 });
 // withCredentials: true //跨域请求时发送cookie
 export default service;
